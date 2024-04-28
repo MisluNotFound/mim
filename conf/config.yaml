@@ -1,0 +1,24 @@
+name: "middit"
+port: "8080"
+mode: "dev"
+machine_id: 1
+start_time: "2024-04-14"
+
+log:
+  level: "info"
+  filename: "web_app.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+mysql:
+  host: "localhost"
+  port: 3306
+  user: "root"
+  password: "030505yzh123"
+  dbname: "mim"
+  max_open_conns: 200
+  max_idle_conns: 50
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0

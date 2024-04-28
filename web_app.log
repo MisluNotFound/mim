@@ -1,0 +1,86 @@
+{"level":"INFO","time":"2024-04-24T21:52:27.048+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"ERROR","time":"2024-04-24T21:52:27.074+0800","caller":"rpc/user.go:27","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T20:34:22.729+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:34:22.798+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T20:34:48.100+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0060874}
+{"level":"INFO","time":"2024-04-27T20:39:15.609+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:39:15.640+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T20:39:22.591+0800","caller":"rpc/user.go:81","msg":"logic SignIn() failed: invalid password"}
+{"level":"INFO","time":"2024-04-27T20:39:22.591+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0063188}
+{"level":"ERROR","time":"2024-04-27T20:40:38.739+0800","caller":"rpc/user.go:36","msg":"logic SignUp() failed: user exist"}
+{"level":"INFO","time":"2024-04-27T20:40:38.740+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T20:40:38.740+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0015436}
+{"level":"INFO","time":"2024-04-27T20:44:46.769+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:44:46.795+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T20:44:55.242+0800","caller":"rpc/user.go:36","msg":"logic SignUp() failed: user exist"}
+{"level":"INFO","time":"2024-04-27T20:44:55.242+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T20:44:55.243+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0055917}
+{"level":"INFO","time":"2024-04-27T20:48:58.003+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:48:58.026+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T20:49:19.818+0800","caller":"rpc/user.go:36","msg":"logic SignUp() failed: user exist "}
+{"level":"INFO","time":"2024-04-27T20:49:19.818+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T20:49:19.819+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0053225}
+{"level":"INFO","time":"2024-04-27T20:51:07.336+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:51:07.370+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T20:51:12.124+0800","caller":"rpc/user.go:36","msg":"logic SignUp() failed: user exist %v"}
+{"level":"INFO","time":"2024-04-27T20:51:12.125+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T20:51:12.125+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.002376}
+{"level":"INFO","time":"2024-04-27T20:52:20.127+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T20:52:20.154+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T20:52:31.519+0800","caller":"rpc/user.go:37","msg":"logic SignUp() failed: user exist "}
+{"level":"INFO","time":"2024-04-27T20:52:31.520+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T20:52:31.520+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0051918}
+{"level":"INFO","time":"2024-04-27T21:03:16.246+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:03:16.275+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:03:20.575+0800","caller":"rpc/user.go:37","msg":"logic SignUp() failed: user exist "}
+{"level":"INFO","time":"2024-04-27T21:03:20.575+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T21:03:20.576+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0026503}
+{"level":"INFO","time":"2024-04-27T21:03:47.018+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:03:47.044+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:03:59.344+0800","caller":"rpc/user.go:37","msg":"logic SignUp() failed: user exist "}
+{"level":"INFO","time":"2024-04-27T21:03:59.345+0800","caller":"rpc/user.go:31","msg":""}
+{"level":"INFO","time":"2024-04-27T21:03:59.345+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0065795}
+{"level":"INFO","time":"2024-04-27T21:14:19.486+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:14:19.512+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:14:24.458+0800","caller":"rpc/user.go:28","msg":"call logic"}
+{"level":"ERROR","time":"2024-04-27T21:14:24.458+0800","caller":"handlers/user.go:28","msg":""}
+{"level":"INFO","time":"2024-04-27T21:14:24.458+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0052186}
+{"level":"INFO","time":"2024-04-27T21:17:52.326+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:17:52.352+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:17:58.909+0800","caller":"rpc/user.go:28","msg":"call logic"}
+{"level":"ERROR","time":"2024-04-27T21:17:58.909+0800","caller":"handlers/user.go:28","msg":""}
+{"level":"INFO","time":"2024-04-27T21:17:58.909+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0079964}
+{"level":"INFO","time":"2024-04-27T21:21:47.435+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:21:47.466+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:21:55.312+0800","caller":"rpc/user.go:28","msg":"call logic"}
+{"level":"ERROR","time":"2024-04-27T21:21:55.312+0800","caller":"handlers/user.go:28","msg":""}
+{"level":"INFO","time":"2024-04-27T21:21:55.312+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0069443}
+{"level":"INFO","time":"2024-04-27T21:41:41.590+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T21:41:41.614+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T21:41:50.613+0800","caller":"rpc/user.go:37","msg":"logic SignUp() failed: ","error":"record not found"}
+{"level":"ERROR","time":"2024-04-27T21:41:50.614+0800","caller":"rpc/user.go:28","msg":"call logic"}
+{"level":"ERROR","time":"2024-04-27T21:41:50.614+0800","caller":"handlers/user.go:28","msg":""}
+{"level":"INFO","time":"2024-04-27T21:41:50.614+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0062357}
+{"level":"INFO","time":"2024-04-27T22:00:49.517+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T22:00:49.543+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"ERROR","time":"2024-04-27T22:00:53.478+0800","caller":"rpc/user.go:28","msg":"call logic"}
+{"level":"ERROR","time":"2024-04-27T22:00:53.479+0800","caller":"handlers/user.go:28","msg":""}
+{"level":"INFO","time":"2024-04-27T22:00:53.479+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0045718}
+{"level":"INFO","time":"2024-04-27T22:04:52.985+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T22:04:53.010+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T22:06:29.352+0800","caller":"rpc/user.go:67","msg":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotMTc5MjEzNzY3NjE0OTc0NzcxMiwidXNlcm5hbWUiOiJjZ2YiLCJleHAiOjE3MTQzMTMxODksImlzcyI6Im1pZGRpdCJ9.MDmJ9317iNNtd8mhSHHSev7AnJ2F9u0z9dtO6l5I1Rw"}
+{"level":"INFO","time":"2024-04-27T22:06:29.355+0800","caller":"rpc/user.go:31","msg":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotMTc5MjEzNzY3NjE0OTc0NzcxMiwidXNlcm5hbWUiOiJjZ2YiLCJleHAiOjE3MTQzMTMxODksImlzcyI6Im1pZGRpdCJ9.MDmJ9317iNNtd8mhSHHSev7AnJ2F9u0z9dtO6l5I1Rw"}
+{"level":"INFO","time":"2024-04-27T22:06:29.355+0800","caller":"logger/logger.go:78","msg":"/user/signup","status":200,"method":"POST","path":"/user/signup","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.018874}
+{"level":"ERROR","time":"2024-04-27T22:07:15.005+0800","caller":"rpc/user.go:82","msg":"logic SignIn() failed: user not exist"}
+{"level":"INFO","time":"2024-04-27T22:07:15.005+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0020363}
+{"level":"INFO","time":"2024-04-27T22:07:36.454+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0041773}
+{"level":"INFO","time":"2024-04-27T22:10:28.386+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T22:10:28.413+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T22:10:33.243+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0046241}
+{"level":"INFO","time":"2024-04-27T22:12:49.291+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T22:12:49.316+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T22:12:53.974+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0068985}
+{"level":"INFO","time":"2024-04-27T22:14:29.334+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-04-27T22:14:29.361+0800","caller":"rpc/user.go:28","msg":"init logicRpc success: running on port 8081"}
+{"level":"INFO","time":"2024-04-27T22:14:33.859+0800","caller":"rpc/user.go:100","msg":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotMTc5MjEzNzY3NjE0OTc0NzcxMiwidXNlcm5hbWUiOiJjZ2YiLCJleHAiOjE3MTQzMTM2NzMsImlzcyI6Im1pZGRpdCJ9.byFn1A3uVTD6coF21zZBUcYo6Z3-FSe5BC7w0GRX_Vg"}
+{"level":"INFO","time":"2024-04-27T22:14:33.860+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0040661}
