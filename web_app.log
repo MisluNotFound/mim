@@ -371,3 +371,10 @@
 {"level":"INFO","time":"2024-05-11T14:34:57.260+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
 {"level":"INFO","time":"2024-05-11T14:34:57.260+0800","caller":"rpc/user.go:19","msg":"init api rpc success"}
 {"level":"INFO","time":"2024-05-11T14:34:57.260+0800","caller":"rpc/user.go:28","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-11T14:38:43.623+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-11T14:38:43.651+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-11T14:38:43.651+0800","caller":"rpc/user.go:19","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-11T14:38:43.652+0800","caller":"rpc/user.go:28","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-11T14:38:43.652+0800","caller":"rpc/rpc.go:22","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-11T14:38:48.088+0800","caller":"websocket/websocket.go:61","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-11T14:38:49.610+0800","caller":"websocket/websocket.go:61","msg":"user connected: ","id":9604920789438464}
