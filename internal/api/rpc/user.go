@@ -5,27 +5,15 @@ import (
 	"mim/pkg/code"
 	"mim/pkg/proto"
 
-	"github.com/smallnest/rpcx/client"
 	"go.uber.org/zap"
 )
-
-var logicRpc client.XClient
-
-func InitAPIRpc() {
-	d, err := client.NewPeer2PeerDiscovery("tcp@"+"localhost:8081", "")
-	if err != nil {
-		zap.L().Error("init api rpc failed: ", zap.Error(err))
-	}
-	zap.L().Info("init api rpc success")
-	logicRpc = client.NewXClient("LogicRpc", client.Failtry, client.RandomSelect, d, client.DefaultOption)
-}
 
 func SignUp(req *proto.SignUpReq) (code.ResCode, string, error) {
 	resp := &proto.SignUpResp{}
 
 	err := logicRpc.Call(context.Background(), "SignUp", req, resp)
 	if err != nil {
-		zap.L().Error("call logic")
+		zap.L().Error("SignUp() call logic failed: ", zap.Error(err))
 		return code.CodeServerBusy, "", err
 	}
 	return resp.Code, resp.Token, nil
@@ -36,6 +24,7 @@ func SignIn(req *proto.SignInReq) (code.ResCode, string, error) {
 
 	err := logicRpc.Call(context.Background(), "SignIn", req, resp)
 	if err != nil {
+		zap.L().Error("SignIn() call logic failed: ", zap.Error(err))
 		return code.CodeServerBusy, "", err
 	}
 	return resp.Code, resp.Token, err

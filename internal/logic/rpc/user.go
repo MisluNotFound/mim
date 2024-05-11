@@ -9,30 +9,13 @@ import (
 	"mim/pkg/proto"
 	"mim/pkg/snowflake"
 
-	"github.com/smallnest/rpcx/server"
 	"go.uber.org/zap"
 )
-
-type LogicRpc struct {
-}
-
-func InitLogicRpc() {
-	s := server.NewServer()
-	if err := s.RegisterName("LogicRpc", new(LogicRpc), ""); err != nil {
-		zap.L().Error("init logicRpc failed: ", zap.Error(err))
-	}
-	s.RegisterOnShutdown(func(s *server.Server) {
-		s.UnregisterAll()
-	})
-
-	zap.L().Info("init logicRpc success")
-	s.Serve("tcp", "localhost:8081")
-}
 
 func (r *LogicRpc) SignUp(ctx context.Context, req *proto.SignUpReq, resp *proto.SignUpResp) error {
 	resp.Code = code.CodeSuccess
 
-	_, ok, err := dao.FindUserByName(req.Username);
+	_, ok, err := dao.FindUserByName(req.Username)
 	if err != nil {
 		zap.L().Error("logic SignUp() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy

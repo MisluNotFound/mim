@@ -25,7 +25,7 @@ func SignUp(c *gin.Context) {
 
 	code, token, err := rpc.SignUp(&req)
 	if err != nil {
-		zap.L().Error("")
+		zap.L().Error("sign up failed: ", zap.Error(err))
 		ResponseError(c, code)
 		return
 	}
