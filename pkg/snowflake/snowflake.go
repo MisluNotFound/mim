@@ -3,21 +3,20 @@ package snowflake
 import (
 	"time"
 
-	"github.com/bwmarrin/snowflake"
+	sf "github.com/bwmarrin/snowflake"
 )
 
-var node *snowflake.Node
+var node *sf.Node
 
-func Init(startTime string, machineId int64) error {
+func Init(startTime string, machineID int64) (err error) {
 	var st time.Time
-	st, err := time.Parse("2006-01-02", startTime)
+	st, err = time.Parse("2006-01-02", startTime)
 	if err != nil {
-		return err
+		return
 	}
-
-	snowflake.Epoch = st.UnixNano()
-	node, err = snowflake.NewNode(machineId)
-	return err
+	sf.Epoch = st.UnixNano() / 1000000
+	node, err = sf.NewNode(machineID)
+	return
 }
 
 func GenID() int64 {

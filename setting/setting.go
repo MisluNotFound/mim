@@ -2,11 +2,11 @@ package setting
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
-
 
 var Conf = new(AppConfig)
 
@@ -21,6 +21,7 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*WsConfig    `mapstructure:"websocket"`
 }
 
 type MySQLConfig struct {
@@ -48,6 +49,17 @@ type LogConfig struct {
 	MaxSize    int    `mapstructure:"max_size"`
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
+}
+
+type WsConfig struct {
+	ReadBufferSize  int           `mapstructure:"read_buffer_size"`
+	WriteBufferSize int           `mapstructure:"write_buffer_size"`
+	ChannelSize     int           `mapstructure:"channel_size"`
+	MaxRetries      int           `mapstructure:"max_retries"`
+	Addr            string        `mapstructure:"address"`
+	TickerPeriod    time.Duration `mapstructure:"ticker_period"`
+	WriteDeadline   time.Duration `mapstructure:"write_deadline"`
+	ReadDeadline    time.Duration `mapstructure:"read_deadline"`
 }
 
 func Init(filePath string) (err error) {

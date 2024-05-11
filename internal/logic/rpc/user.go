@@ -25,7 +25,7 @@ func InitLogicRpc() {
 		s.UnregisterAll()
 	})
 
-	zap.L().Info("init logicRpc success: running on port 8081")
+	zap.L().Info("init logicRpc success")
 	s.Serve("tcp", "localhost:8081")
 }
 
@@ -98,5 +98,19 @@ func (r *LogicRpc) SignIn(ctx context.Context, req *proto.SignInReq, resp *proto
 	}
 	resp.Token = token
 	zap.L().Info(resp.Token)
+	return nil
+}
+
+func (r *LogicRpc) Auth(ctx context.Context, req *proto.AuthReq, resp *proto.AuthResp) error {
+	resp.Code = code.CodeSuccess
+	token := req.Token
+	c, err := jwt.ParseToken(token)
+	if err != nil {
+		resp.Code = code.CodeInvalidToken
+		return err
+	}
+
+	resp.UserID = c.UserID
+	resp.Username = c.Username
 	return nil
 }

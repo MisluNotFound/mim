@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mim/db"
 	"mim/internal/api"
+	"mim/internal/connect"
 	"mim/internal/logic"
 	"mim/pkg/logger"
 	"mim/pkg/snowflake"
@@ -20,8 +21,9 @@ func main() {
 	snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID)
 	db.InitDB(dsn)
 	logic.InitLogic()
+	connect.InitConnect()
 	api.InitAPI()
-	db.InitDB(dsn)
+	fmt.Println(setting.Conf.WsConfig.WriteDeadline)
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

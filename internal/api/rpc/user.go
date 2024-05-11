@@ -2,7 +2,6 @@ package rpc
 
 import (
 	"context"
-	"fmt"
 	"mim/pkg/code"
 	"mim/pkg/proto"
 
@@ -17,6 +16,7 @@ func InitAPIRpc() {
 	if err != nil {
 		zap.L().Error("init api rpc failed: ", zap.Error(err))
 	}
+	zap.L().Info("init api rpc success")
 	logicRpc = client.NewXClient("LogicRpc", client.Failtry, client.RandomSelect, d, client.DefaultOption)
 }
 
@@ -28,7 +28,6 @@ func SignUp(req *proto.SignUpReq) (code.ResCode, string, error) {
 		zap.L().Error("call logic")
 		return code.CodeServerBusy, "", err
 	}
-	zap.L().Info(resp.Token)
 	return resp.Code, resp.Token, nil
 }
 
@@ -39,6 +38,5 @@ func SignIn(req *proto.SignInReq) (code.ResCode, string, error) {
 	if err != nil {
 		return code.CodeServerBusy, "", err
 	}
-	fmt.Println("api: ", resp.Token)
 	return resp.Code, resp.Token, err
 }

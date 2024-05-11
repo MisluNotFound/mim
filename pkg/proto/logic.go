@@ -4,13 +4,13 @@ package proto
 import "mim/pkg/code"
 
 type SignUpReq struct {
-	Username string 
-	Password string
+	Username   string
+	Password   string
 	RePassword string
 }
 
 type SignUpResp struct {
-	Code code.ResCode
+	Code  code.ResCode
 	Token string
 }
 
@@ -20,6 +20,16 @@ type SignInReq struct {
 }
 
 type SignInResp struct {
-	Code code.ResCode
+	Code  code.ResCode
 	Token string
+}
+
+type AuthReq struct {
+	Token string
+}
+
+type AuthResp struct {
+	Code     code.ResCode
+	UserID   int64
+	Username string
 }

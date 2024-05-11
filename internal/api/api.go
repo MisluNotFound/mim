@@ -12,7 +12,7 @@ import (
 var r *gin.Engine
 
 func InitAPI() {
-	rpc.InitAPIRpc()
+	go rpc.InitAPIRpc()
 	go router()
 }
 
