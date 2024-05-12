@@ -2,7 +2,6 @@ package rpc
 
 import (
 	"context"
-	"fmt"
 	"mim/internal/logic/dao"
 	"mim/pkg/code"
 	"mim/pkg/jwt"
@@ -23,7 +22,7 @@ func (r *LogicRpc) SignUp(ctx context.Context, req *proto.SignUpReq, resp *proto
 	}
 
 	if ok {
-		zap.L().Error("logic SignUp() failed: user exist")
+		zap.L().Info("logic SignUp() failed: user exist")
 		resp.Code = code.CodeUserExist
 		return nil
 	}
@@ -47,8 +46,7 @@ func (r *LogicRpc) SignUp(ctx context.Context, req *proto.SignUpReq, resp *proto
 		return err
 	}
 	resp.Token = token
-	zap.L().Info(resp.Token)
-	fmt.Println("println: logic ", resp.Token)
+
 	return nil
 }
 

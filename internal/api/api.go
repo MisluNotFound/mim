@@ -25,5 +25,13 @@ func router() {
 		u.POST("/signup", handlers.SignUp)
 	}
 
+	g := r.Group("/group").Use(handlers.Auth())
+	{
+		g.POST("/new", handlers.NewGroup)
+		g.POST("/join", handlers.JoinGroup)
+		g.GET("/get", handlers.FindGroup)
+		g.DELETE("/leave", handlers.LeaveGroup)
+	}
+
 	r.Run(":8080")
 }
