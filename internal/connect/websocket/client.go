@@ -25,10 +25,11 @@ type Client struct {
 	ID        int64
 	Username  string
 	server    *Server
-	Next      *Client
-	Pre       *Client
+	next      *Client
+	pre       *Client
 	HeartBeat time.Time
 	lock      sync.RWMutex
+	IsUse     bool
 }
 
 type Message struct {
@@ -39,9 +40,12 @@ type Message struct {
 	Target int64
 }
 
-func NewClient(size int) *Client {
+func NewClient(id int64, username string, size int) *Client {
 	return &Client{
 		channel: make(chan []byte, size),
+		ID: id,
+		Username: username,
+		HeartBeat: time.Now(),
 	}
 }
 
@@ -50,9 +54,9 @@ func (c *Client) writeProc() {
 	// 1. 心跳检测
 	ticker := time.NewTicker(setting.Conf.WsConfig.TickerPeriod)
 	defer func() {
-		c.done<-struct{}{}
+		c.done <- struct{}{}
 		ticker.Stop()
-		c.server.getUserBucket(c.ID).RemoveClient(c.ID)
+		c.server.getBucket(c.ID).RemoveClient(c.ID)
 		c.Conn.Close()
 	}()
 	// 2. 接收消息
@@ -101,19 +105,19 @@ func (c *Client) writeProc() {
 
 func (c *Client) readProc() {
 	defer func() {
-		c.server.getUserBucket(c.ID).RemoveClient(c.ID)
+		c.server.getBucket(c.ID).RemoveClient(c.ID)
 		c.Conn.Close()
 	}()
 
 	for {
 		select {
-		case <-c.done: 
+		case <-c.done:
 			return
 		default:
 			_, msg, err := c.Conn.ReadMessage()
 			if err != nil {
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					c.done <- struct{}{} 
+					c.done <- struct{}{}
 					zap.L().Error("read message from client failed: ", zap.Error(err), zap.Any("client", c.ID))
 					return
 				}
@@ -138,6 +142,9 @@ func (c *Client) HandleMessage(msg []byte) {
 	zap.L().Debug("message content: ", zap.Any("msg", msg), zap.Any("client", c.ID))
 	uid := m.Target
 
-	target := c.server.GetUser(uid)
+	target, ok := c.server.GetUser(uid)
+	if !ok {
+		// relay
+	}
 	target.channel <- m.Body
 }

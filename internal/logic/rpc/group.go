@@ -11,7 +11,7 @@ import (
 )
 
 func getMembers(id int64) ([]*dao.User, error) {
-	ugs, err := dao.FindUserGroups(id)
+	ugs, err := dao.FindUserGroupsByG(id)
 	if err != nil {
 		return nil, err
 	}
@@ -170,6 +170,26 @@ func (l *LogicRpc) LeaveGroup(ctx context.Context, req *proto.LeaveGroupReq, res
 		resp.Code = code.CodeServerBusy
 		return err
 	}
-	
+
+	return nil
+}
+
+func (l *LogicRpc) FindGroups(ctx context.Context, req *proto.FindGroupsReq, resp *proto.FindGroupsResp) error {
+	resp.Code = code.CodeSuccess
+
+	ugs, err := dao.FindUserGroupsByU(req.UserID)
+	if err != nil {
+		zap.L().Error("logic FindGroups() failed: ", zap.Error(err))
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	var gids []int64
+	for _, ug := range ugs {
+		gids = append(gids, ug.GroupID)
+	}
+
+	resp.Groups = &gids
+
 	return nil
 }

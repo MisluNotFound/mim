@@ -44,7 +44,7 @@ func IsJoined(uid, gid int64) (*UserGroup, bool, error) {
 	return &ug, false, nil
 }
 
-func FindUserGroups(gid int64) ([]*UserGroup, error) {
+func FindUserGroupsByG(gid int64) ([]*UserGroup, error) {
 	var ugs []*UserGroup
 
 	if err := db.DB.Where("group_id = ?", gid).Find(&ugs).Error; err != nil {
@@ -61,4 +61,14 @@ func DelateUserGroup(uid, gid int64) error {
 	}
 
 	return nil
+}
+
+func FindUserGroupsByU(uid int64) ([]*UserGroup, error) {
+	var ugs []*UserGroup
+
+	if err := db.DB.Where("user_id = ?", uid).Find(&ugs).Error; err != nil {
+		return nil, err
+	}
+
+	return ugs, nil
 }

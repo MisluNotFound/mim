@@ -43,3 +43,12 @@ type LeaveGroupReq struct {
 type LeaveGroupResp struct {
 	Code code.ResCode
 }
+
+type FindGroupsReq struct {
+	UserID int64
+}
+
+type FindGroupsResp struct {
+	Code   code.ResCode
+	Groups *[]int64
+}

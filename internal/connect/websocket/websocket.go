@@ -55,8 +55,14 @@ func serve(s *Server, w http.ResponseWriter, r *http.Request) {
 	c.Username = username
 	c.done = make(chan struct{})
 	c.channel = make(chan []byte, 20)
-	s.AssignToBucket(c)
+
+
+	handleConnection(s, c)
+}
+
+func handleConnection(s *Server, c *Client) {
+	s.AssignInBucket(c)
 	go c.readProc()
 	go c.writeProc()
-	zap.L().Info("user connected: ", zap.Any("id", id))
+	zap.L().Info("user connected: ", zap.Any("id", c.ID))
 }
