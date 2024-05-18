@@ -5,24 +5,24 @@ package websocket
 
 import (
 	"crypto/md5"
-	"mim/internal/connect/rpc"
+	logicrpc "mim/internal/connect/rpc/logic_rpc"
 	"mim/pkg/proto"
 	"strconv"
-
-	"github.com/gorilla/websocket"
 )
 
 var Default *Server
 
 type Server struct {
-	Bucket []*Bucket
-	Count  int
+	Bucket    []*Bucket
+	ServerID  int
+	Count     int
 }
 
-func NewServer(buckets []*Bucket) *Server {
+func NewServer(buckets []*Bucket, id int) *Server {
 	return &Server{
-		Bucket: buckets,
-		Count:  len(buckets),
+		ServerID: id,
+		Bucket:   buckets,
+		Count:    len(buckets),
 	}
 }
 
@@ -60,53 +60,23 @@ func (s *Server) getBucket(id int64) *Bucket {
 func (s *Server) GetUser(id int64) (*Client, bool) {
 	b := s.getBucket(id)
 	b.lock.RLock()
-	defer b.lock.Unlock()
+	defer b.lock.RUnlock()
 
 	c, ok := b.clients[id]
 	return c, ok
 }
 
-func (s *Server) GetRoom(id int64) (*Room, bool) {
-	b := s.getBucket(id)
-	b.lock.RLock()
-	defer b.lock.Unlock()
-
-	r, ok := b.rooms[id]
-	return r, ok
-}
-
-func (s *Server) assignRoom(g *Room) {
-	bucketIdx := s.getHashCode(g.ID)
-
-	_, ok := s.GetRoom(g.ID)
-	if ok {
-		return
-	}
-
-	b := s.Bucket[bucketIdx]
-	b.lock.Lock()
-	defer b.lock.Unlock()
-
-	b.rooms[g.ID] = g
-}
-
 func (s *Server) AssignInBucket(c *Client) {
-	groups, err := rpc.GetGroup(&proto.FindGroupsReq{
-		UserID: c.ID,
-	})
 
-	s.assignUser(c)
-	if err != nil {
-		c.Conn.WriteMessage(websocket.BinaryMessage, []byte("server busy"))
+	req := &proto.OnlineReq{
+		UserID:   c.ID,
+		ServerID: s.ServerID,
+	}
+	if err := logicrpc.Online(req); err != nil {
+		c.lock.Lock()
+		c.Conn.WriteJSON("登录失败，请重新登录")
+		c.lock.Unlock()
 		return
 	}
-
-	for _, g := range *groups {
-		r := &Room{
-			ID:    g,
-			Count: 0,
-		}
-		s.assignRoom(r)
-		r.AddClient(c)
-	}
+	s.assignUser(c)
 }

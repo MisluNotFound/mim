@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	"mim/internal/connect/rpc"
+	logicrpc "mim/internal/connect/rpc/logic_rpc"
 	"mim/pkg/proto"
 	"mim/setting"
 	"net/http"
@@ -41,22 +41,20 @@ func serve(s *Server, w http.ResponseWriter, r *http.Request) {
 		Token: token,
 	}
 
-	id, username, err := rpc.Auth(req)
+	id, username, err := logicrpc.Auth(req)
 	if err != nil {
 		zap.L().Error("unauthorized")
 		conn.Close()
 		return
 	}
 
-	c := NewClient(setting.Conf.WsConfig.ChannelSize)
+	c := NewClient(id, username, setting.Conf.WsConfig.ChannelSize)
+
 	c.Conn = conn
 	c.server = s
 	c.ID = id
-	c.Username = username
-	c.done = make(chan struct{})
-	c.channel = make(chan []byte, 20)
 
-
+	// client放入在线表
 	handleConnection(s, c)
 }
 

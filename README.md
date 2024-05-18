@@ -2,12 +2,12 @@
 go实现的im系统 
 
 ## issue
-1. 连接池
 2. redis设计（消息设计 在线用户设计 群用户表设计 消息队列设计）
 3. messaging层
 4. 重写消息收发逻辑
 # 流程
 用户登录，建立长连接 
+放入在线表 logic层获取用户群组在redis中维护在线用户以及用户的群聊和会话 logic开一个长连接业务
 获取未读消息 拉取
 服务器记录长连接 向logic层查询用户加入的群聊 
     在redis中查找是否有该群
@@ -40,3 +40,14 @@ go实现的im系统
 使用Redis的列表数据类型，将每条聊天消息添加到列表的尾部。
 当需要获取聊天历史记录时，可以从列表的头部按照时间顺序遍历。
 通过控制列表的长度，可以限制历史记录的大小，保持存储在Redis中的记录数量不过度增长。
+
+表设计：
+会话列表:
+    sortedset prefix-senderid: senderid+targetid msgid/seq 长期存在
+消息列表：
+    sortedset prefix-senderid+targetid: msgid/seq msgid/seq
+离线消息列表：
+    set prefix-userid: senderid
+    list prefix-senderid: msgid/seq
+消息记录：
+    senderid， targetid， content， isread

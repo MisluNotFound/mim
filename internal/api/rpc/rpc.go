@@ -11,6 +11,7 @@ func InitAPIRpc() {
 	d, err := client.NewPeer2PeerDiscovery("tcp@"+"localhost:8081", "")
 	if err != nil {
 		zap.L().Error("init api rpc failed: ", zap.Error(err))
+		return
 	}
 	zap.L().Info("init api rpc success")
 	logicRpc = client.NewXClient("LogicRpc", client.Failtry, client.RandomSelect, d, client.DefaultOption)

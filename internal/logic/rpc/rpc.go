@@ -1,3 +1,4 @@
+// rpc为短链接提供服务
 package rpc
 
 import (

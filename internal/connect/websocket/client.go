@@ -2,6 +2,8 @@ package websocket
 
 import (
 	"encoding/json"
+	logicrpc "mim/internal/connect/rpc/logic_rpc"
+	"mim/pkg/proto"
 	"mim/setting"
 	"sync"
 	"time"
@@ -10,42 +12,26 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	TypePong = 1 + iota
-	TypeSingle
-	TypeGroup
-	TypeAck
-)
-
 // client维持用户的ws连接
 type Client struct {
 	Conn      *websocket.Conn
-	channel   chan []byte
+	Channel   chan []byte
 	done      chan struct{}
 	ID        int64
 	Username  string
 	server    *Server
-	next      *Client
-	pre       *Client
 	HeartBeat time.Time
 	lock      sync.RWMutex
 	IsUse     bool
 }
 
-type Message struct {
-	Body   []byte
-	Seq    int
-	Type   int // 1单聊 2群聊
-	From   int64
-	Target int64
-}
-
 func NewClient(id int64, username string, size int) *Client {
 	return &Client{
-		channel: make(chan []byte, size),
-		ID: id,
-		Username: username,
+		Channel:   make(chan []byte, size),
+		ID:        id,
+		Username:  username,
 		HeartBeat: time.Now(),
+		done:      make(chan struct{}),
 	}
 }
 
@@ -63,7 +49,7 @@ func (c *Client) writeProc() {
 
 	for {
 		select {
-		case msg, ok := <-c.channel:
+		case msg, ok := <-c.Channel:
 			// 接收到消息之后，设置响应时间
 			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
 			if !ok {
@@ -123,28 +109,22 @@ func (c *Client) readProc() {
 				}
 			}
 
-			c.HandleMessage(msg)
+			c.handleMessage(msg)
 		}
 	}
 }
-func (c *Client) HandleMessage(msg []byte) {
+
+func (c *Client) handleMessage(msg []byte) {
 	if len(msg) == 0 {
 		return
 	}
 
-	m := Message{}
-	if err := json.Unmarshal(msg, &m); err != nil {
+	req := &proto.MessageReq{}
+	if err := json.Unmarshal(msg, &req); err != nil {
 		zap.L().Error("unmarshal message failed: ", zap.Error(err), zap.Any("client", c.ID), zap.Any("msg content", msg))
 		c.done <- struct{}{}
 		return
 	}
 
-	zap.L().Debug("message content: ", zap.Any("msg", msg), zap.Any("client", c.ID))
-	uid := m.Target
-
-	target, ok := c.server.GetUser(uid)
-	if !ok {
-		// relay
-	}
-	target.channel <- m.Body
+	logicrpc.SendMessage(req)
 }
