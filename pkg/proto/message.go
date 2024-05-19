@@ -14,7 +14,7 @@ type MessageResp struct {
 type PushMessageReq struct {
 	SenderID int64
 	TargetID int64
-	Req      int64
+	Seq      int64
 	Body     []byte
 }
 

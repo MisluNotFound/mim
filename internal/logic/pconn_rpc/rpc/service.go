@@ -22,6 +22,7 @@ func (r *PRpc) Online(ctx context.Context, req *proto.OnlineReq, resp *proto.Onl
 }
 
 func (r *PRpc) Offline(ctx context.Context, req *proto.OfflineReq, resp *proto.OfflineResp) error {
-
+	// 在线用户列表删除
+	
 	return nil
 }

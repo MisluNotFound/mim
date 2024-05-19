@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	prefixSession        = "session:"
-	prefixMessage  = "message-list:"
+	prefixSession        = "session:"					// 记录所有会话 prefix+senderid+targetid
+	prefixMessage  = "message-list:"					// 记录会话中的所有消息
 	prefixMessageOffline = "message-offline:"			// 索引 记录哪些用户给目标用户发送了离线消息
-	prefixMessageOfflineList = "message-offline-list:"	// 索引 记录离线消息列表
-	prefixMessageList = "message-list"					// 记录所有未接收的消息
+	prefixMessageOfflineList = "message-offline-list:"	// 索引 记录离线消息列表 prefix+senderid: seq
+	prefixMessageList = "message-list"					// 记录所有未接收的消息 unack
 )
 
 func StoreRedisMessage(msg Message) {
@@ -29,45 +29,81 @@ func StoreRedisMessage(msg Message) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond * 1000)
 	defer cancel()
-	db.RDB.Watch(ctx, func(tx *redis.Tx) error {
+	err := db.RDB.Watch(ctx, func(tx *redis.Tx) error {
 		pipe := tx.TxPipeline()
-		
-		// 更新会话状态	
-		pipe.ZAdd(ctx, senderSession, redis.Z{
-			Member: sessionID,
-			Score: float64(msg.Seq),
-		})
-
-		pipe.ZAdd(ctx, targetSession, redis.Z{
-			Member: sessionID,
-			Score: float64(msg.Seq),
-		})
-
+	
+		// 更新会话状态
+		if _, err := pipe.ZAdd(ctx, senderSession, redis.Z{Member: sessionID, Score: float64(msg.Seq)}).Result(); err != nil {
+			return err
+		}
+		if _, err := pipe.ZAdd(ctx, targetSession, redis.Z{Member: sessionID, Score: float64(msg.Seq)}).Result(); err != nil {
+			return err
+		}
+	
 		// 插入消息列表中
-		pipe.ZAdd(ctx, sessionID, redis.Z{
-			Member: msg.Seq,
-			Score: float64(msg.Seq),
-		})
-
+		if _, err := pipe.ZAdd(ctx, sessionID, redis.Z{Member: msg.Seq, Score: float64(msg.Seq)}).Result(); err != nil {
+			return err
+		}
+	
 		// 添加到未接收消息列表中
 		key := prefixMessageList
-		val, _ := json.Marshal(msg)
-		pipe.ZAdd(ctx, key, redis.Z{
-			Member: val,
-			Score: float64(time.Now().Unix()),
-		})
-
+		val, err := json.Marshal(msg)
+		if err != nil {
+			return err
+		}
+		if _, err := pipe.ZAdd(ctx, key, redis.Z{Member: val, Score: float64(time.Now().Unix())}).Result(); err != nil {
+			return err
+		}
+	
+		// 处理离线消息
 		if msg.Status == "offline" {
 			offlineMessageID := prefixMessageOffline + targetStr
-			pipe.SAdd(ctx, offlineMessageID, msg.SenderID)
+			if _, err := pipe.SAdd(ctx, offlineMessageID, msg.SenderID).Result(); err != nil {
+				return err
+			}
 			offlineList := prefixMessageOfflineList + senderStr
-			pipe.LPush(ctx, offlineList, msg.Seq)
+			if _, err := pipe.LPush(ctx, offlineList, msg.Seq).Result(); err != nil {
+				return err
+			}
+		}
+	
+		// 执行事务
+		_, err = pipe.Exec(ctx)
+		return err
+	}, senderSession, targetSession)
+	
+	if err != nil {
+		zap.L().Error("store message to redis failed: ", zap.Error(err))
+	}
+
+}
+
+func StoreOfflineMessage(msg Message) error {
+	senderStr := strconv.FormatInt(msg.SenderID, 10)
+	targetStr := strconv.FormatInt(msg.TargetID, 10)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond * 1000)
+	defer cancel()
+	
+	offlineMessageID := prefixMessageOffline + targetStr
+	offlineList := prefixMessageOfflineList + senderStr
+	err := db.RDB.Watch(ctx, func(tx *redis.Tx) error {
+		pipe := tx.TxPipeline()
+		
+		if _, err := pipe.SAdd(ctx, offlineMessageID, msg.SenderID).Result(); err != nil {
+			return err
+		}
+
+		if _, err := pipe.LPush(ctx, offlineList, msg.Seq).Result(); err != nil {
+			return err
 		}
 
 		return nil
-	}, senderSession, targetSession)
-
+	}, offlineMessageID, offlineList)
+	
+	return err
 }
+
 
 func GetUnAckMessage() *[]Message {
 	key := prefixMessageList

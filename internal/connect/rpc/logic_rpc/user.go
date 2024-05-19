@@ -50,3 +50,14 @@ func Online(req *proto.OnlineReq) error {
 
 	return nil
 }
+
+func Offline(req *proto.OfflineReq) error {
+	resp := &proto.OfflineResp{}
+
+	err := logicPRpc.Call(context.Background(), "Offline", req, resp)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+}

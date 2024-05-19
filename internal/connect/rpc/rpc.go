@@ -17,7 +17,11 @@ func InitConnectRpc() {
 	s.RegisterOnShutdown(func(s *server.Server) {
 		s.UnregisterAll()
 	})
+	if err := s.Serve("tcp", "localhost:8084"); err != nil {
+		zap.L().Error("init connect rpc server failed: ", zap.Error(err))
+		return
+	}
+
 	zap.L().Info("init connect rpc server success")
-	s.Serve("tcp", "8084")
 }
 

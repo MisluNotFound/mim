@@ -5,6 +5,8 @@ import (
 	"mim/internal/logic/redis"
 	"mim/pkg/proto"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type MessageReceiver struct {
@@ -18,7 +20,7 @@ const (
 	TypeAck
 )
 
-var Receiver MessageReceiver
+var Receiver *MessageReceiver
 
 func NewReceiver(size int) *MessageReceiver {
 	return &MessageReceiver{
@@ -28,16 +30,18 @@ func NewReceiver(size int) *MessageReceiver {
 
 func (mr *MessageReceiver) Start() {
 	go mr.handleMessage()
-	go mr.listenUnAckMessage()
+	// go mr.listenUnAckMessage()
 }
 
 func (mr *MessageReceiver) handleMessage() {
+	zap.L().Info("start handleMessage process success")
 	for msg := range mr.Queue {
 		m := &redis.Message{
 			SenderID: msg.SenderID,
 			TargetID: msg.TargetID,
 			Body:     msg.Body,
 		}
+		zap.L().Info("read message from queue", zap.Any("msg", m))
 
 		switch msg.Type {
 		case TypeSingle:

@@ -2,6 +2,9 @@
 package messaging
 
 import (
+	"fmt"
+	"mim/internal/logic/dao"
+
 	wsrpc "mim/internal/logic/pconn_rpc/conn_rpc"
 	"mim/internal/logic/redis"
 	"mim/pkg/proto"
@@ -21,22 +24,23 @@ func singleHandler(msg *redis.Message) {
 	if err != nil {
 		zap.L().Error("singleHandler() failed: ", zap.Error(err))
 	}
-
-	if info.UserID == 0 {
-		msg.Status = StatusOffline
-	} else {
-		msg.Status = StatusOnline
-	}
-
 	msg.Seq = snowflake.GenID()
 
 	req := &proto.PushMessageReq{
 		SenderID: msg.SenderID,
 		TargetID: msg.TargetID,
-		Req: msg.Seq,
-		Body: msg.Body,
+		Seq:      msg.Seq,
+		Body:     msg.Body,
 	}
-	wsrpc.PushMessage(req)
+	fmt.Println(info)
+	if info.UserID == 0 {
+		msg.Status = StatusOffline
+	} else {
+		msg.Status = StatusOnline
+		wsrpc.PushMessage(req)
+	}
+
+	zap.L().Info("singleHandler receive message", zap.Any("msg", req))
 	go asyncSaveMessage(msg)
 }
 
@@ -54,4 +58,10 @@ func ackHandler(msg *redis.Message) {
 
 func asyncSaveMessage(msg *redis.Message) {
 	redis.StoreRedisMessage(*msg)
+	dao.StoreMysqlMessage(&dao.Message{
+		SenderID: msg.SenderID,
+		TargetID: msg.TargetID,
+		Content:  msg.Body,
+		Seq:      msg.Seq,
+	})
 }

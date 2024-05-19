@@ -24,3 +24,298 @@
 {"level":"INFO","time":"2024-05-18T21:43:04.095+0800","caller":"rpc/rpc.go:24","msg":"init connect rpc server success"}
 {"level":"INFO","time":"2024-05-18T21:43:04.095+0800","caller":"rpc/rpc.go:20","msg":"init logicRpc success"}
 {"level":"INFO","time":"2024-05-18T21:43:04.096+0800","caller":"rpc/rpc.go:44","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.157+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.196+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.197+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.197+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.197+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.198+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.198+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:00:50.199+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:01:14.901+0800","caller":"rpc/user.go:81","msg":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5NjA0OTIwNzg5NDM4NDY0LCJ1c2VybmFtZSI6ImNnZiIsImV4cCI6MTcxNjE3MDQ3NCwiaXNzIjoibWlkZGl0In0.W44ast_mPZThuHpHpCGNs2dka1YSs3SjxhZNzSgfSi0"}
+{"level":"INFO","time":"2024-05-19T10:01:14.902+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0126794}
+{"level":"INFO","time":"2024-05-19T10:01:26.657+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:01:43.117+0800","caller":"rpc/user.go:81","msg":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5NjA0ODE4NjExOTk4NzIwLCJ1c2VybmFtZSI6InpjbCIsImV4cCI6MTcxNjE3MDUwMywiaXNzIjoibWlkZGl0In0.kLqxwbQHw5pk2V4qI1TKdqTaP8QTp_xP23Ue95SGxgk"}
+{"level":"INFO","time":"2024-05-19T10:01:43.117+0800","caller":"logger/logger.go:78","msg":"/user/signin","status":200,"method":"POST","path":"/user/signin","query":"","ip":"::1","user-agent":"PostmanRuntime/7.36.3","errors":"","cost":0.0035009}
+{"level":"INFO","time":"2024-05-19T10:02:01.597+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:15:54.643+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.672+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.672+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.672+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.673+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.673+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.673+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:15:54.673+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:16:04.553+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:16:07.582+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:16:10.641+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:16:10.642+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:20:56.067+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.093+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.093+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.093+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.093+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.093+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.096+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.097+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:20:56.097+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:21:46.541+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:21:48.059+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:21:50.644+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:21:50.644+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:22:31.773+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.795+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.795+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.796+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.796+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.795+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.796+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.796+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:22:31.796+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:23:18.012+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:23:19.658+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:23:21.641+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:23:21.642+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:28:11.267+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.299+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.299+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.299+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.299+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.300+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.300+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.300+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:28:11.300+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:28:18.064+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:28:19.865+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:28:21.462+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:28:21.462+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":0,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:28:21.463+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":0,"Body":"5L2g5aW9","Status":""}}
+{"level":"ERROR","time":"2024-05-19T10:28:40.549+0800","caller":"websocket/client.go:124","msg":"unmarshal message failed: ","error":"json: cannot unmarshal string into Go struct field MessageReq.TargetID of type int64","client":9604818611998720,"msg content":"ew0KICAgICJTZW5kZXJJRCI6IDk2MDQ4MTg2MTE5OTg3MjAsDQogICAgIlRhcmdldElEIjogIjk2MDQ5MjA3ODk0Mzg0NjQiLA0KICAgICJCb2R5IjogIjVMMmc1YVc5Ig0KfQ=="}
+{"level":"ERROR","time":"2024-05-19T10:28:40.550+0800","caller":"websocket/client.go:86","msg":"write routine was closed by read routine"}
+{"level":"INFO","time":"2024-05-19T10:32:19.326+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:32:19.327+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:32:19.327+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:32:21.151+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:32:33.378+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:32:33.378+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:32:33.379+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:36:53.219+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.240+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.240+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.240+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.241+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.241+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.241+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.241+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:36:53.241+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:36:58.380+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:36:59.640+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:37:03.697+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:37:03.699+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":0,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:37:03.699+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:39:14.765+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.787+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.787+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:39:14.788+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:39:19.604+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:39:21.258+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:39:22.922+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:39:22.923+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:39:22.923+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:39:22.924+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12723685102194688,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T10:39:22.924+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12723685102194688,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:42:40.197+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.219+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.219+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.219+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.219+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.219+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.220+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.221+0800","caller":"rpc/rpc.go:20","msg":"init connect rpc server success"}
+{"level":"INFO","time":"2024-05-19T10:42:40.221+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:42:51.541+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:42:53.320+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:42:54.985+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:42:54.997+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:42:54.997+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:42:54.998+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12724574609215488,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T10:42:54.998+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12724574609215488,"Body":"5L2g5aW9"}}
+{"level":"ERROR","time":"2024-05-19T10:42:55.001+0800","caller":"conn_rpc/message.go:14","msg":"PushMessage() failed: ","error":"dial tcp 127.0.0.1:8084: connectex: No connection could be made because the target machine actively refused it."}
+{"level":"INFO","time":"2024-05-19T10:44:43.380+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.402+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.402+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.402+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.402+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.402+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"ERROR","time":"2024-05-19T10:44:43.403+0800","caller":"rpc/rpc.go:21","msg":"init connect rpc server failed: ","error":"listen tcp: address 8084: missing port in address"}
+{"level":"INFO","time":"2024-05-19T10:44:43.403+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:44:43.404+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.725+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.746+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.746+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.746+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.746+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.746+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.747+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T10:45:30.747+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T10:45:35.702+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T10:45:37.853+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T10:45:39.561+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:45:39.562+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:45:39.562+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T10:45:39.563+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12725264844853248,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T10:45:39.563+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12725264844853248,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T10:45:39.567+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12725264844853248,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:26:13.111+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.144+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.144+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.145+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.145+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.145+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.146+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T12:26:13.146+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T12:26:24.630+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T12:26:26.872+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T12:26:32.874+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:26:32.875+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:26:32.875+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T12:26:32.876+0800","caller":"messaging/service.go:40","msg":"singleHandler receive message","msg":{"Seq":12750654279782400,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T12:26:32.876+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12750654279782400,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:26:32.880+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12750654279782400,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:30:36.637+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.663+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T12:30:36.664+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T12:31:23.005+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T12:31:24.621+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T12:31:26.741+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:31:26.742+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:31:26.742+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T12:31:26.743+0800","caller":"messaging/service.go:40","msg":"singleHandler receive message","msg":{"Seq":12751886847315968,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T12:31:26.743+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12751886847315968,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T12:31:26.744+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12751886847315968,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:41:30.690+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.717+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.717+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.717+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.717+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.717+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.719+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T14:41:30.719+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T14:41:39.425+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T14:41:41.057+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T14:41:42.964+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:41:42.965+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:41:42.965+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T14:41:42.966+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12784670462709760,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:41:42.967+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12784670462709760,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:41:42.967+0800","caller":"messaging/service.go:40","msg":"singleHandler receive message","msg":{"Seq":12784670462709760,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T14:45:16.926+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.954+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.955+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.955+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.962+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.962+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.964+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T14:45:16.996+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T14:45:50.115+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T14:45:51.422+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T14:45:54.100+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:45:54.101+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:45:54.101+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T14:45:54.102+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12785723803439104,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:45:54.102+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12785723803439104,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:45:54.103+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12785723803439104,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T14:48:16.549+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.572+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.572+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.573+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.573+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.573+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.573+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T14:48:16.573+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T14:48:22.535+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T14:48:24.015+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604920789438464}
+{"level":"INFO","time":"2024-05-19T14:48:26.282+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:48:26.282+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:48:26.283+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T14:48:26.283+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12786362096816128,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:48:26.284+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12786362096816128,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T14:48:26.284+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12786362096816128,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T15:33:17.858+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.881+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.881+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.881+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.881+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.881+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.882+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T15:33:17.882+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T15:34:39.347+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T15:34:44.823+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:34:44.824+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:34:44.824+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T15:34:44.824+0800","caller":"conn_rpc/message.go:12","msg":"ws client receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12798016142446592,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:34:44.829+0800","caller":"rpc/message.go:13","msg":"ws server pushMessage() receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12798016142446592,"Body":"5L2g5aW9"}}
+{"level":"ERROR","time":"2024-05-19T15:34:44.830+0800","caller":"conn_rpc/message.go:14","msg":"PushMessage() failed: ","error":"[service internal error]: runtime error: invalid memory address or nil pointer dereference, method: PushMessage, argv: &{SenderID:9604818611998720 TargetID:9604920789438464 Req:12798016142446592 Body:[228 189 160 229 165 189]}, stack: goroutine 88 [running]:\ngithub.com/smallnest/rpcx/server.(*service).call.func1()\n\tD:/goWorkSpae/pkg/mod/github.com/smallnest/rpcx@v1.8.29/server/service.go:342 +0x8f\npanic({0xabe0e0?, 0x1457a10?})\n\tD:/GoLan/src/runtime/panic.go:914 +0x21f\nmim/internal/connect/rpc.(*ConnectRpc).PushMessage(0xc0000b62c0?, {0x0?, 0xc000042480?}, 0xc0000eede0, 0xc0006f641c)\n\tD:/goWorkSpae/src/mim/internal/connect/rpc/message.go:22 +0x19b\nreflect.Value.call({0xc00048a000?, 0xc0000b4540?, 0x400?}, {0xbdcb5f, 0x4}, {0xc000537a60, 0x4, 0x1f0cb000598?})\n\tD:/GoLan/src/reflect/value.go:596 +0xce7\nreflect.Value.Call({0xc00048a000?, 0xc0000b4540?, 0xa4d200?}, {0xc000013a60?, 0xb48d60?, 0xc000013a10?})\n\tD:/GoLan/src/reflect/value.go:380 +0xb9\ngithub.com/smallnest/rpcx/server.(*service).call(0xc000420004?, {0xe2a2a8?, 0xc000230300?}, 0xb?, {0xa4d1c0?, 0xc0000eede0?, 0x0?}, {0xa4d200, 0xc0006f641c, 0x16})\n\tD:/goWorkSpae/pkg/mod/github.com/smallnest/rpcx@v1.8.29/server/service.go:353 +0x1d5\ngithub.com/smallnest/rpcx/server.(*Server).handleRequest(0xc000206000, {0xe2a2a8, 0xc000230300}, 0xc00017d560)\n\tD:/goWorkSpae/pkg/mod/github.com/smallnest/rpcx@v1.8.29/server/server.go:738 +0x6fa\ngithub.com/smallnest/rpcx/server.(*Server).processOneRequest(0xc000206000, 0xc0001c46c0?, 0xc00017d560, {0xe2e588, 0xc0002203f0})\n\tD:/goWorkSpae/pkg/mod/github.com/smallnest/rpcx@v1.8.29/server/server.go:591 +0x5f9\ncreated by github.com/smallnest/rpcx/server.(*Server).serveConn in goroutine 87\n\tD:/goWorkSpae/pkg/mod/github.com/smallnest/rpcx@v1.8.29/server/server.go:520 +0xb5e\n"}
+{"level":"INFO","time":"2024-05-19T15:34:44.831+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","msg":{"Seq":12798016142446592,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":"online"}}
+{"level":"INFO","time":"2024-05-19T15:40:15.151+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.180+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.180+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.181+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.181+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.181+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.181+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T15:40:15.181+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T15:40:25.693+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T15:40:26.827+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:40:26.827+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:40:26.828+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T15:40:26.828+0800","caller":"messaging/service.go:34","msg":"singleHandler receive message","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Req":12799450611191808,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:41:25.877+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.922+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.922+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.922+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.922+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.923+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.923+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T15:41:25.923+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T15:41:31.735+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T15:41:32.603+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:41:32.603+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:41:32.604+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T15:41:32.604+0800","caller":"messaging/service.go:41","msg":"singleHandler receive message","status":"online"}
+{"level":"INFO","time":"2024-05-19T15:44:59.359+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.385+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.385+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.386+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.386+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.386+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.386+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T15:44:59.386+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T15:45:05.372+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T15:45:07.406+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:45:07.407+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:45:07.407+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T15:45:07.408+0800","caller":"messaging/service.go:43","msg":"singleHandler receive message","status":"online"}
+{"level":"INFO","time":"2024-05-19T15:48:06.556+0800","caller":"logger/logger.go:45","msg":"init logger success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.580+0800","caller":"conn_rpc/rpc.go:17","msg":"init WsRpc client success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"messaging/receiver.go:37","msg":"start handleMessage process success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"websocket/websocket.go:25","msg":"init ws server success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"rpc/rpc.go:16","msg":"init api rpc success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"logic_rpc/rpc.go:26","msg":"init connect rpc success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"rpc/rpc.go:21","msg":"init logicRpc success"}
+{"level":"INFO","time":"2024-05-19T15:48:06.581+0800","caller":"rpc/rpc.go:21","msg":"init PRpc success"}
+{"level":"INFO","time":"2024-05-19T15:50:13.337+0800","caller":"websocket/websocket.go:65","msg":"user connected: ","id":9604818611998720}
+{"level":"INFO","time":"2024-05-19T15:50:14.027+0800","caller":"logic_rpc/message.go:12","msg":"logic client receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:50:14.028+0800","caller":"rpc/message.go:13","msg":"logic server receive message: ","msg":{"SenderID":9604818611998720,"TargetID":9604920789438464,"Ack":0,"Type":2,"Body":"5L2g5aW9"}}
+{"level":"INFO","time":"2024-05-19T15:50:14.028+0800","caller":"messaging/receiver.go:44","msg":"read message from queue","msg":{"Seq":0,"SenderID":9604818611998720,"TargetID":9604920789438464,"Body":"5L2g5aW9","Status":""}}
+{"level":"INFO","time":"2024-05-19T15:50:14.029+0800","caller":"messaging/service.go:43","msg":"singleHandler receive message","status":"offline"}

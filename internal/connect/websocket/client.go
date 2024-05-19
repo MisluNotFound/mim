@@ -42,8 +42,7 @@ func (c *Client) writeProc() {
 	defer func() {
 		c.done <- struct{}{}
 		ticker.Stop()
-		c.server.getBucket(c.ID).RemoveClient(c.ID)
-		c.Conn.Close()
+		c.offline()
 	}()
 	// 2. 接收消息
 
@@ -91,8 +90,7 @@ func (c *Client) writeProc() {
 
 func (c *Client) readProc() {
 	defer func() {
-		c.server.getBucket(c.ID).RemoveClient(c.ID)
-		c.Conn.Close()
+		c.offline()
 	}()
 
 	for {
@@ -127,4 +125,18 @@ func (c *Client) handleMessage(msg []byte) {
 	}
 
 	logicrpc.SendMessage(req)
+}
+
+
+func (c *Client) offline() {
+	req := &proto.OfflineReq{
+		UserID:   c.ID,
+	}
+	if err := logicrpc.Offline(req); err != nil {
+		zap.L().Error("failed to notify server of offline status: ", zap.Error(err), zap.Any("client", c.ID))
+	}
+
+	// 释放资源
+	c.server.getBucket(c.ID).RemoveClient(c.ID)
+	c.Conn.Close()
 }

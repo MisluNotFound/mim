@@ -72,6 +72,7 @@ func (s *Server) AssignInBucket(c *Client) {
 		UserID:   c.ID,
 		ServerID: s.ServerID,
 	}
+	
 	if err := logicrpc.Online(req); err != nil {
 		c.lock.Lock()
 		c.Conn.WriteJSON("登录失败，请重新登录")
