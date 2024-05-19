@@ -1,5 +1,10 @@
 package proto
 
+import (
+	"mim/internal/logic/dao"
+	"mim/pkg/code"
+)
+
 type MessageReq struct {
 	SenderID int64
 	TargetID int64
@@ -20,4 +25,16 @@ type PushMessageReq struct {
 
 type PushMessageResp struct {
 	IsOffline bool
+}
+
+type PullMessageReq struct {
+	UserID   int64
+	TargetID int64
+	LastSeq  int
+	Size     int
+}
+
+type PullMessageResp struct {
+	Code     code.ResCode
+	Messages map[int64][]dao.Message
 }

@@ -7,10 +7,10 @@ import (
 )
 
 type Message struct {
-	Seq      int64
-	SenderID int64
-	TargetID int64
-	Content  []byte
+	Seq       int64
+	SenderID  int64
+	TargetID  int64
+	Content   []byte
 	DeletedAt gorm.DeletedAt
 }
 
@@ -24,4 +24,13 @@ func StoreMysqlMessage(msg *Message) error {
 	}
 
 	return nil
+}
+
+func GetMessages(seqs []int64) ([]Message, error) {
+	var messages []Message
+	if err := db.DB.Where("seq IN ?", seqs).Find(&messages).Error; err != nil {
+		return nil, err
+	}
+
+	return messages, nil
 }

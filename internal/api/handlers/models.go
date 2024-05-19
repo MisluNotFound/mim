@@ -27,3 +27,9 @@ type ParamFindGroup struct {
 type ParamLeaveGroup struct {
 	GroupID int64 `json:"group_id" binding:"required"`
 }
+
+type ParamPullMessage struct {
+	LastSeq  int64 `json:"last_seq" binding:"required"`
+	Size     int   `json:"size" binding:"required"`
+	TargetID int64 `json:"target_id"`
+}

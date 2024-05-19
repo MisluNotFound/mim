@@ -33,5 +33,9 @@ func router() {
 		g.DELETE("/leave", handlers.LeaveGroup)
 	}
 
+	m := r.Group("/message").Use(handlers.Auth())
+	{
+		m.GET("/pull", handlers.PullMessage)
+	}
 	r.Run(":8080")
 }
