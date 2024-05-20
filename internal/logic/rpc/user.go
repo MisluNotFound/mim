@@ -22,7 +22,7 @@ func (r *LogicRpc) SignUp(ctx context.Context, req *proto.SignUpReq, resp *proto
 	}
 
 	if ok {
-		zap.L().Info("logic SignUp() failed: user exist")
+		zap.L().Error("logic SignUp() failed: user exist")
 		resp.Code = code.CodeUserExist
 		return nil
 	}
@@ -78,7 +78,6 @@ func (r *LogicRpc) SignIn(ctx context.Context, req *proto.SignInReq, resp *proto
 		return err
 	}
 	resp.Token = token
-	zap.L().Info(resp.Token)
 	return nil
 }
 

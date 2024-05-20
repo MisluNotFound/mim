@@ -89,7 +89,7 @@ func (l *LogicRpc) JoinGroup(ctx context.Context, req *proto.JoinGroupReq, resp 
 	}
 
 	if ok {
-		zap.L().Info("logic JoinGroup() failed: user already join group")
+		zap.L().Error("logic JoinGroup() failed: user already join group")
 		resp.Code = code.CodeAlreadyJoined
 		return dao.ErrorGroupAlreadyJoined
 	}

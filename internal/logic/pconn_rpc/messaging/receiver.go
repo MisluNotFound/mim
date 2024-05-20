@@ -41,7 +41,7 @@ func (mr *MessageReceiver) handleMessage() {
 			TargetID: msg.TargetID,
 			Body:     msg.Body,
 		}
-		zap.L().Info("read message from queue", zap.Any("msg", m))
+		// zap.L().Info("read message from queue", zap.Any("msg", m))
 
 		switch msg.Type {
 		case TypeSingle:

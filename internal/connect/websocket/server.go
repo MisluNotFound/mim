@@ -81,3 +81,7 @@ func (s *Server) AssignInBucket(c *Client) {
 	}
 	s.assignUser(c)
 }
+
+func (s *Server) Close() {
+	
+}

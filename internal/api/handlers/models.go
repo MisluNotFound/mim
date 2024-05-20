@@ -29,7 +29,7 @@ type ParamLeaveGroup struct {
 }
 
 type ParamPullMessage struct {
-	LastSeq  int64 `json:"last_seq" binding:"required"`
-	Size     int   `json:"size" binding:"required"`
+	LastSeq  int64 `json:"last_seq"`
 	TargetID int64 `json:"target_id"`
+	Size     int   `json:"size" binding:"required"`
 }

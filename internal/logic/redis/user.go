@@ -19,6 +19,7 @@ func AddOnlineUser(uid int64, sid int) (err error) {
 	key := prefixOnlineUser + strconv.FormatInt(uid, 10)
 	info := make(map[string]interface{})
 	info["server_id"] = sid
+	info["user_id"] = uid
 	err = db.RDB.HSet(ctx, key, info).Err()
 
 	return
@@ -51,4 +52,16 @@ func GetUserInfo(uid int64) (u UserInfo, err error) {
 	u.ServerID = sid
 	u.UserID = id
 	return
+}
+
+func Close() {
+	pattern := prefixOnlineUser + "*"
+	ctx := context.Background()
+
+	iter := db.RDB.Scan(ctx, 0, pattern, 0).Iterator()
+	for iter.Next(ctx) {
+		key := iter.Val()
+
+		db.RDB.Del(ctx, key)
+	}
 }

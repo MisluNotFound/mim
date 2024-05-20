@@ -56,31 +56,28 @@ func (c *Client) writeProc() {
 				c.Conn.WriteMessage(websocket.CloseMessage, nil)
 				return
 			}
-			var err error
-			// 失败重试
-			for i := 0; i < setting.Conf.WsConfig.MaxRetries; i++ {
-				c.lock.Lock()
-				err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
-				if err == nil {
-					return
-				}
-				c.lock.Unlock()
-			}
+			zap.L().Info("read msg from channel", zap.Any("msg: ", msg))
 
+			var err error
+			// TODO 失败重试
+			c.lock.Lock()
+			err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
 			if err != nil {
-				zap.L().Error("write message failed: ", zap.Error(err), zap.Any("client", c.ID))
-				return
+				zap.L().Error("write message failed: ", zap.Error(err))
+				return 
 			}
+			c.lock.Unlock()
 
 			c.HeartBeat = time.Now()
 		case <-ticker.C:
-			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
-			c.lock.Lock()
-			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-				zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
-				return
-			}
-			c.lock.Unlock()
+			// c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
+			// c.lock.Lock()
+			// if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+			// 	zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
+			// 	return
+			// }
+			// c.lock.Unlock()
+			zap.L().Info("ticker ping")
 		case <-c.done:
 			zap.L().Error("write routine was closed by read routine")
 			return
@@ -96,13 +93,14 @@ func (c *Client) readProc() {
 	for {
 		select {
 		case <-c.done:
+			zap.L().Error("read routine was closed by write routine")
 			return
 		default:
 			_, msg, err := c.Conn.ReadMessage()
 			if err != nil {
+				zap.L().Error("read message from client failed: ", zap.Error(err), zap.Any("client", c.ID))
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					c.done <- struct{}{}
-					zap.L().Error("read message from client failed: ", zap.Error(err), zap.Any("client", c.ID))
 					return
 				}
 			}
@@ -127,16 +125,18 @@ func (c *Client) handleMessage(msg []byte) {
 	logicrpc.SendMessage(req)
 }
 
-
 func (c *Client) offline() {
 	req := &proto.OfflineReq{
-		UserID:   c.ID,
+		UserID: c.ID,
 	}
+
+	zap.L().Info("send offline request", zap.Any("client:", req.UserID))
 	if err := logicrpc.Offline(req); err != nil {
 		zap.L().Error("failed to notify server of offline status: ", zap.Error(err), zap.Any("client", c.ID))
 	}
 
 	// 释放资源
 	c.server.getBucket(c.ID).RemoveClient(c.ID)
+	c.Conn.WriteJSON("close conn")
 	c.Conn.Close()
 }

@@ -17,3 +17,9 @@ func InitDB(dsn string) error {
 	DB = db
 	return nil
 }
+
+func Close() {
+	conn, _ := DB.DB()
+	conn.Close()
+}
+	

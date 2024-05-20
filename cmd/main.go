@@ -28,7 +28,7 @@ func main() {
 	connect.InitConnect()
 	api.InitAPI()
 
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 4)
 	signal.Notify(quit, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	<-quit
 	fmt.Println("Server exiting")

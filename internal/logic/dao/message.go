@@ -28,7 +28,7 @@ func StoreMysqlMessage(msg *Message) error {
 
 func GetMessages(seqs []int64) ([]Message, error) {
 	var messages []Message
-	if err := db.DB.Where("seq IN ?", seqs).Find(&messages).Error; err != nil {
+	if err := db.DB.Select("seq, sender_id, target_id, content").Where("seq IN ?", seqs).Find(&messages).Error; err != nil {
 		return nil, err
 	}
 

@@ -30,7 +30,7 @@ type PushMessageResp struct {
 type PullMessageReq struct {
 	UserID   int64
 	TargetID int64
-	LastSeq  int
+	LastSeq  int64
 	Size     int
 }
 

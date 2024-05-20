@@ -2,7 +2,6 @@
 package messaging
 
 import (
-	"fmt"
 	"mim/internal/logic/dao"
 
 	wsrpc "mim/internal/logic/pconn_rpc/conn_rpc"
@@ -32,15 +31,15 @@ func singleHandler(msg *redis.Message) {
 		Seq:      msg.Seq,
 		Body:     msg.Body,
 	}
-	fmt.Println(info)
+
 	if info.UserID == 0 {
 		msg.Status = StatusOffline
 	} else {
 		msg.Status = StatusOnline
-		wsrpc.PushMessage(req)
+		go wsrpc.PushMessage(req)
 	}
 
-	zap.L().Info("singleHandler receive message", zap.Any("msg", req))
+	// zap.L().Info("singleHandler receive message", zap.Any("msg", req))
 	go asyncSaveMessage(msg)
 }
 

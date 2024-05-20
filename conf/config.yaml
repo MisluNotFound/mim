@@ -29,3 +29,4 @@ websocket:
   read_deadline: 10s
   write_deadline: 10s
   max_retries: 3
+  channel_size: 50

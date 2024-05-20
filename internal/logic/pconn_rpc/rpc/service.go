@@ -22,7 +22,13 @@ func (r *PRpc) Online(ctx context.Context, req *proto.OnlineReq, resp *proto.Onl
 }
 
 func (r *PRpc) Offline(ctx context.Context, req *proto.OfflineReq, resp *proto.OfflineResp) error {
-	// 在线用户列表删除
-	
+	resp.Code = code.CodeSuccess
+
+	if err := redis.RemoveOnlineUser(req.UserID); err != nil {
+		zap.L().Error("logic Offline() failed: ", zap.Error(err))
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
 	return nil
 }
