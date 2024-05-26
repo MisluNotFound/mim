@@ -43,3 +43,10 @@ type PullMessageResp struct {
 	Code code.ResCode
 	Data Data
 }
+
+type OfflineMessageReq struct {
+	SenderID int64
+	TargetID int64
+	Seq      int64
+	Body     []byte
+}

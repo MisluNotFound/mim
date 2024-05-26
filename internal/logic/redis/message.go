@@ -107,8 +107,6 @@ func StoreRedisMessage(msg dao.Message, status string) {
 			return err
 		}
 
-		// 处理离线消息
-
 		// 执行事务
 		_, err = pipe.Exec(ctx)
 		return err

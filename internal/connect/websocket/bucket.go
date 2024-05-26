@@ -48,8 +48,7 @@ func consumeMessage(messages <-chan amqp.Delivery) {
 		json.Unmarshal(d.Body, req)
 		c, ok := Default.GetUser(req.TargetID)
 		if !ok {
-			// 不ack
-			return
+			
 		}
 
 		c.Channel <- d.Body

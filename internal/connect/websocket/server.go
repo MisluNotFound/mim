@@ -5,7 +5,7 @@ package websocket
 
 import (
 	"crypto/md5"
-	logicrpc "mim/internal/connect/rpc/logic_rpc"
+	logicrpc "mim/internal/connect/logic_rpc"
 	"mim/pkg/mq"
 	"mim/pkg/proto"
 	"strconv"

@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	logicrpc "mim/internal/connect/rpc/logic_rpc"
+	logicrpc "mim/internal/connect/logic_rpc"
 	"mim/pkg/proto"
 	"mim/setting"
 	"net/http"

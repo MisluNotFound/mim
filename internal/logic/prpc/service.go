@@ -3,6 +3,7 @@ package prpc
 
 import (
 	"context"
+	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/code"
 	"mim/pkg/proto"
@@ -27,6 +28,21 @@ func (r *PRpc) Offline(ctx context.Context, req *proto.OfflineReq, resp *proto.O
 	if err := redis.RemoveOnlineUser(req.UserID); err != nil {
 		zap.L().Error("logic Offline() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+func (r *PRpc) StoreOffline(ctx context.Context, req *proto.OfflineMessageReq, resp *proto.MessageResp) error {
+	err := redis.StoreOfflineMessage(dao.Message{
+		Seq:      req.Seq,
+		SenderID: req.SenderID,
+		TargetID: req.TargetID,
+		Content:  req.Body,
+	})
+
+	if err != nil {
 		return err
 	}
 
