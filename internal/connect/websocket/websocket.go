@@ -21,9 +21,8 @@ func InitWebsocket() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serve(Default, w, r)
 	})
-
 	zap.L().Info("init ws server success")
-	if err := http.ListenAndServe(setting.Conf.WsConfig.Addr, nil); err != nil {
+	if err := http.ListenAndServe(setting.Conf.WsConfig.WSServers[0].Addr, nil); err != nil {
 		zap.L().Error("init ws server failed: ", zap.Error(err))
 	}
 }

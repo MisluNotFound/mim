@@ -17,7 +17,7 @@ var (
 	StatusOffline = "offline"
 )
 
-func singleHandler(msg *redis.Message) {
+func singleHandler(msg *dao.Message) {
 	// 查询用户状态
 	info, err := redis.GetUserInfo(msg.TargetID)
 	if err != nil {
@@ -29,18 +29,18 @@ func singleHandler(msg *redis.Message) {
 		SenderID: msg.SenderID,
 		TargetID: msg.TargetID,
 		Seq:      msg.Seq,
-		Body:     msg.Body,
+		Body:     msg.Content,
 	}
-
+	var status string
 	if info.UserID == 0 {
-		msg.Status = StatusOffline
+		status = StatusOffline
 	} else {
-		msg.Status = StatusOnline
+		status = StatusOnline
 		go wsrpc.PushMessage(req)
 	}
 
 	// zap.L().Info("singleHandler receive message", zap.Any("msg", req))
-	go asyncSaveMessage(msg)
+	go asyncSaveMessage(msg, status)
 }
 
 func groupHandler(msg *redis.Message) {
@@ -55,12 +55,12 @@ func ackHandler(msg *redis.Message) {
 
 }
 
-func asyncSaveMessage(msg *redis.Message) {
-	redis.StoreRedisMessage(*msg)
+func asyncSaveMessage(msg *dao.Message, status string) {
+	redis.StoreRedisMessage(*msg, status)
 	dao.StoreMysqlMessage(&dao.Message{
 		SenderID: msg.SenderID,
 		TargetID: msg.TargetID,
-		Content:  msg.Body,
+		Content:  msg.Content,
 		Seq:      msg.Seq,
 	})
 }

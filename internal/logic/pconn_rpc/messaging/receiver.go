@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"fmt"
+	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/proto"
 	"time"
@@ -36,10 +37,10 @@ func (mr *MessageReceiver) Start() {
 func (mr *MessageReceiver) handleMessage() {
 	zap.L().Info("start handleMessage process success")
 	for msg := range mr.Queue {
-		m := &redis.Message{
+		m := &dao.Message{
 			SenderID: msg.SenderID,
 			TargetID: msg.TargetID,
-			Body:     msg.Body,
+			Content:     msg.Body,
 		}
 		// zap.L().Info("read message from queue", zap.Any("msg", m))
 
@@ -47,11 +48,11 @@ func (mr *MessageReceiver) handleMessage() {
 		case TypeSingle:
 			singleHandler(m)
 		case TypeGroup:
-			groupHandler(m)
+			// groupHandler(m)
 		case TypePong:
-			pongHandler(m)
+			// pongHandler(m)
 		case TypeAck:
-			ackHandler(m)
+			// ackHandler(m)
 		}
 	}
 }

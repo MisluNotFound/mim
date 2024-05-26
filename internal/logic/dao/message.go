@@ -11,7 +11,8 @@ type Message struct {
 	SenderID  int64
 	TargetID  int64
 	Content   []byte
-	DeletedAt gorm.DeletedAt
+	IsRead    bool				// true代表未读
+	DeletedAt gorm.DeletedAt	
 }
 
 func (m *Message) TableName() string {
@@ -26,10 +27,25 @@ func StoreMysqlMessage(msg *Message) error {
 	return nil
 }
 
-func GetMessages(seqs []int64) ([]Message, error) {
+func GetMessages(userID, targetID, start int64, size int) ([]Message, error) {
 	var messages []Message
-	if err := db.DB.Select("seq, sender_id, target_id, content").Where("seq IN ?", seqs).Find(&messages).Error; err != nil {
-		return nil, err
+
+	if targetID == 0 {
+		if err := db.DB.Select("seq, sender_id, target_id, content").
+			Where("sender_id = ? OR target_id = ?", userID, userID).
+			Order("seq DESC").
+			Limit(size * 2).
+			Find(&messages).Error; err != nil {
+			return nil, err
+		}
+	} else {
+		if err := db.DB.Select("seq, sender_id, target_id, content").
+			Where("(sender_id = ? AND target_id = ?) OR (sender_id = ? AND target_id = ?)", userID, targetID, targetID, userID).
+			Order("seq DESC").
+			Limit(size * 2).
+			Find(&messages).Error; err != nil {
+			return nil, err
+		}
 	}
 
 	return messages, nil

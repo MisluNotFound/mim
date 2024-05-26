@@ -1,8 +1,9 @@
 package redis
 
 type UserInfo struct {
-	UserID   int64 
-	ServerID int  
+	UserID   int64
+	ServerID int
+	BucketID int
 }
 
 type Message struct {
@@ -12,5 +13,3 @@ type Message struct {
 	Body     []byte
 	Status   string
 }
-
-

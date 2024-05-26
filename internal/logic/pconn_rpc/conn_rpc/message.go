@@ -2,6 +2,7 @@ package wsrpc
 
 import (
 	"context"
+	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/proto"
 
@@ -16,10 +17,11 @@ func PushMessage(req *proto.PushMessageReq) {
 	}
 
 	if resp.IsOffline {
-		redis.StoreOfflineMessage(redis.Message{
+		redis.StoreOfflineMessage(dao.Message{
 			SenderID: req.SenderID,
 			TargetID: req.TargetID,
 			Seq:      req.Seq,
+			Content:  req.Body,
 		})
 	}
 }

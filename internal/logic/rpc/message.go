@@ -7,42 +7,63 @@ import (
 	"mim/internal/logic/redis"
 	"mim/pkg/code"
 	"mim/pkg/proto"
+
+	"go.uber.org/zap"
 )
 
 func (r *LogicRpc) PullMessage(ctx context.Context, req *proto.PullMessageReq, resp *proto.PullMessageResp) error {
 	resp.Code = code.CodeSuccess
+	data := map[string][]dao.Message{}
 
-	// redis获取消息seq数组
-	seqs, err := redis.GetMessages(req.UserID, req.TargetID, req.LastSeq, req.Size)
+	// 获取用户会话
+	userSessions, err := redis.GetUserSessions(req.UserID)
 	if err != nil {
-		resp.Code = code.CodeServerBusy
-		return err
-	}
-	fmt.Println("online messages", seqs)
-
-	offlineSeqs, _ := redis.GetOfflineMessages(req.UserID)
-	fmt.Println("offline messages", seqs)
-	seqs = append(seqs, offlineSeqs...)
-
-	// mysql获取消息内容
-	messages, err := dao.GetMessages(seqs)
-	if err != nil {
+		zap.L().Error("get userSession failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
 		return err
 	}
 
+	// 尝试从缓存中获取
+	messages, err := redis.GetMessages(req.UserID, req.TargetID, req.LastSeq, req.Size)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	fmt.Println("online messages", messages)
+	// 未命中
+	if len(messages) < req.Size {
+		zap.L().Info("cache miss, get message from mysql")
+		messages, err = dao.GetMessages(req.UserID, req.TargetID, req.LastSeq, req.Size)
+		if err != nil {
+			resp.Code = code.CodeServerBusy
+			return err
+		}
+		fmt.Println("read message from mysql", messages)
+		go redis.WriteBack(req.UserID, messages)
+	}
+	
 	// 包装 map[session][]messages
-	data := map[int64][]dao.Message{}
 	for _, msg := range messages {
-		s, t := msg.SenderID, msg.TargetID
+		session := redis.GetSessionID(msg.SenderID, msg.TargetID)
+		data[session] = append(data[session], msg)
+	}
+	
+	offlineMessages, _ := redis.GetOfflineMessages(req.UserID)
+	fmt.Println("offline messages", offlineMessages)
 
-		if s != req.UserID {
-			data[s] = append(data[s], msg)
-		} else if t != req.UserID {
-			data[t] = append(data[t], msg)
+	// 可以优化 慢
+	for _, msg := range offlineMessages {
+		session := redis.GetSessionID(msg.SenderID, msg.TargetID)
+		for i := range data[session] {
+
+			if data[session][i].Seq == msg.Seq {
+				data[session][i].IsRead = true
+			}
 		}
 	}
 
-	resp.Messages = data
+	resp.Data.Sessions = userSessions
+	resp.Data.Messages = data
 	return nil
 }

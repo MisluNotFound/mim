@@ -2,14 +2,13 @@ package rpc
 
 import (
 	"context"
-	"mim/internal/logic/dao"
 	"mim/pkg/code"
 	"mim/pkg/proto"
 
 	"go.uber.org/zap"
 )
 
-func PullMessage(req *proto.PullMessageReq) (code.ResCode, map[int64][]dao.Message, error) {
+func PullMessage(req *proto.PullMessageReq) (code.ResCode, interface{}, error) {
 	resp := &proto.PullMessageResp{}
 
 	if err := logicRpc.Call(context.Background(), "PullMessage", req, resp); err != nil {
@@ -17,5 +16,5 @@ func PullMessage(req *proto.PullMessageReq) (code.ResCode, map[int64][]dao.Messa
 		return code.CodeServerBusy, nil, err
 	}
 
-	return resp.Code, resp.Messages, nil
+	return resp.Code, resp.Data, nil
 }

@@ -12,7 +12,7 @@ import (
 
 func (r *PRpc) Online(ctx context.Context, req *proto.OnlineReq, resp *proto.OnlineResp) error {
 	resp.Code = code.CodeSuccess
-	if err := redis.AddOnlineUser(req.UserID, req.ServerID); err != nil {
+	if err := redis.AddOnlineUser(req.UserID, req.ServerID, req.BucketID); err != nil {
 		zap.L().Info("logic Online() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
 		return err

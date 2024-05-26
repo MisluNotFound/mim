@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"encoding/json"
 	logicrpc "mim/internal/connect/rpc/logic_rpc"
 	"mim/pkg/proto"
 	"mim/setting"
@@ -20,6 +19,7 @@ type Client struct {
 	ID        int64
 	Username  string
 	server    *Server
+	BucketID  int
 	HeartBeat time.Time
 	lock      sync.RWMutex
 	IsUse     bool
@@ -64,7 +64,7 @@ func (c *Client) writeProc() {
 			err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
 			if err != nil {
 				zap.L().Error("write message failed: ", zap.Error(err))
-				return 
+				return
 			}
 			c.lock.Unlock()
 
@@ -115,14 +115,14 @@ func (c *Client) handleMessage(msg []byte) {
 		return
 	}
 
-	req := &proto.MessageReq{}
-	if err := json.Unmarshal(msg, &req); err != nil {
-		zap.L().Error("unmarshal message failed: ", zap.Error(err), zap.Any("client", c.ID), zap.Any("msg content", msg))
-		c.done <- struct{}{}
+	zap.L().Info("handleMessage receive", zap.Any("msg", msg))
+	err := c.server.publisher.PublishMessage(msg, setting.Conf.MQConfig.Exchange,
+		setting.Conf.MQConfig.RoutingKey,
+		setting.Conf.MQConfig.Queue)
+	if err != nil {
+		zap.L().Error("connect push message to mq failed: ", zap.Error(err))
 		return
 	}
-
-	logicrpc.SendMessage(req)
 }
 
 func (c *Client) offline() {

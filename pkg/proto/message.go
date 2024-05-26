@@ -34,7 +34,12 @@ type PullMessageReq struct {
 	Size     int
 }
 
+type Data struct {
+	Sessions []string
+	Messages map[string][]dao.Message
+}
+
 type PullMessageResp struct {
-	Code     code.ResCode
-	Messages map[int64][]dao.Message
+	Code code.ResCode
+	Data Data
 }

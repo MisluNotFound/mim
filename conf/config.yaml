@@ -30,3 +30,17 @@ websocket:
   write_deadline: 10s
   max_retries: 3
   channel_size: 50
+  servers:
+    - server_id: 1
+      addr: ":8082"
+      bucket_size: 5
+    - server_id: 2
+      addr: ":8083"
+      bucket_size: 5
+mq:
+  url: "amqp://guest:guest@localhost:5672/"
+  logic_publishers: 2
+  logic_consumers: 2
+  exchange: "connectToLogic"
+  queue: "downQueue"
+  routing_key: "down"

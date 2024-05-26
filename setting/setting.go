@@ -22,6 +22,7 @@ type AppConfig struct {
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
 	*WsConfig    `mapstructure:"websocket"`
+	*MQConfig    `mapstructure:"mq"`
 }
 
 type MySQLConfig struct {
@@ -51,14 +52,29 @@ type LogConfig struct {
 }
 
 type WsConfig struct {
-	ReadBufferSize  int           `mapstructure:"read_buffer_size"`
-	WriteBufferSize int           `mapstructure:"write_buffer_size"`
-	ChannelSize     int           `mapstructure:"channel_size"`
-	MaxRetries      int           `mapstructure:"max_retries"`
-	Addr            string        `mapstructure:"address"`
-	TickerPeriod    time.Duration `mapstructure:"ticker_period"`
-	WriteDeadline   time.Duration `mapstructure:"write_deadline"`
-	ReadDeadline    time.Duration `mapstructure:"read_deadline"`
+	ReadBufferSize  int              `mapstructure:"read_buffer_size"`
+	WriteBufferSize int              `mapstructure:"write_buffer_size"`
+	ChannelSize     int              `mapstructure:"channel_size"`
+	MaxRetries      int              `mapstructure:"max_retries"`
+	WSServers       []WSServerConfig `mapstructure:"servers"`
+	TickerPeriod    time.Duration    `mapstructure:"ticker_period"`
+	WriteDeadline   time.Duration    `mapstructure:"write_deadline"`
+	ReadDeadline    time.Duration    `mapstructure:"read_deadline"`
+}
+
+type WSServerConfig struct {
+	ID         int    `mapstructure:"server_id"`
+	BucketSize int    `mapstructure:"bucket_size"`
+	Addr       string `mapstructure:"addr"`
+}
+
+type MQConfig struct {
+	URL                string `mapstructure:"url"`
+	Exchange           string `mapstructure:"exchange"`
+	Queue              string `mapstructure:"queue"`
+	RoutingKey         string `mapstructure:"routing_key"`
+	LogicPublishersNum int32  `mapstructure:"logic_publishers"`
+	LogicConsumersNum  int    `mapstructure:"logic_consumers"`
 }
 
 func Init(filePath string) (err error) {

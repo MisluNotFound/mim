@@ -2,11 +2,11 @@
 go实现的im系统 
 
 ## issue
-1. 消息未接收重发逻辑
-2. 程序退出的清理 关闭连接，移除在线用户
-3. 查找在线用户的bug
-4. 拉取消息的bug
-
+1. 存消息已读未读 时间戳
+2. 推拉隔离
+3. 优化查询等等
+4. 群聊消息
+5. 加入mq层
 
 # 流程
 用户登录，建立长连接 
@@ -57,3 +57,21 @@ go实现的im系统
     list prefix-senderid: msgid/seq
 消息记录：
     senderid， targetid， content， isread
+
+
+缓存设计：
+    消息存入缓存，异步写入数据库
+    对于文本消息 直接存储内容，对于二进制消息，文件系统存储内容，缓存存储url
+    写策略：先写redis
+
+mq层设计：
+    connect与logic层的交互使用mq
+    connect-->logic:
+        根据logic层消费者数量确定queue      logic初始化queue
+        connect将消息放入mq 保证消息只被消费一次        
+        logic处理消息放入mq         
+    logic-->connect:
+        server对应exchange
+        bucket对应queue
+        bucket作为消费者
+        bucket获取消息，在自己的map中找到user发送

@@ -5,6 +5,7 @@ import "mim/pkg/code"
 type OnlineReq struct {
 	UserID   int64
 	ServerID int
+	BucketID int
 }
 
 type OnlineResp struct {

@@ -6,6 +6,7 @@ package websocket
 import (
 	"crypto/md5"
 	logicrpc "mim/internal/connect/rpc/logic_rpc"
+	"mim/pkg/mq"
 	"mim/pkg/proto"
 	"strconv"
 )
@@ -16,14 +17,31 @@ type Server struct {
 	Bucket    []*Bucket
 	ServerID  int
 	Count     int
+	RabbitMQ  *mq.RabbitMQ
+	publisher *mq.Publisher
 }
 
-func NewServer(buckets []*Bucket, id int) *Server {
-	return &Server{
-		ServerID: id,
-		Bucket:   buckets,
-		Count:    len(buckets),
+func NewServer(bucketSize, id int, rabbitMQURL string) *Server {
+	rabbitMQ, _ := mq.NewRabbitMQ(rabbitMQURL)
+	server := &Server{
+		ServerID:  id,
+		RabbitMQ:  rabbitMQ,
+		publisher: mq.NewPublisher(rabbitMQ),
 	}
+
+	buckets := make([]*Bucket, bucketSize)
+	for i := range buckets {
+		buckets[i] = NewBucket(server.RabbitMQ, server.ServerID, i)
+	}
+
+	server.Bucket = buckets
+	server.Count = len(buckets)
+
+	for i := range server.Bucket {
+		go server.Bucket[i].Consumer.Work(false, consumeMessage)
+	}
+
+	return server
 }
 
 func (s *Server) getHashCode(id int64) int {
@@ -38,6 +56,7 @@ func (s *Server) getHashCode(id int64) int {
 
 func (s *Server) assignUser(c *Client) {
 	bucketIdx := s.getHashCode(c.ID)
+	c.BucketID = bucketIdx
 
 	_, ok := s.GetUser(c.ID)
 	if ok {
@@ -68,20 +87,21 @@ func (s *Server) GetUser(id int64) (*Client, bool) {
 
 func (s *Server) AssignInBucket(c *Client) {
 
+	s.assignUser(c)
 	req := &proto.OnlineReq{
 		UserID:   c.ID,
 		ServerID: s.ServerID,
+		BucketID: c.BucketID,
 	}
-	
+
 	if err := logicrpc.Online(req); err != nil {
 		c.lock.Lock()
 		c.Conn.WriteJSON("登录失败，请重新登录")
 		c.lock.Unlock()
 		return
 	}
-	s.assignUser(c)
 }
 
 func (s *Server) Close() {
-	
+
 }
