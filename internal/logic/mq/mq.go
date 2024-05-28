@@ -23,8 +23,11 @@ func InitMQ(rabbitMQURL string, exchangeName, queueName, routingKey string, cons
 
 func StartConsumers(exchangeName, queueName, routingKey string, consumerNum int) {
 	for i := 0; i < consumerNum; i++ {
-		consumer := mq.NewConsumer(rabbitMQ, exchangeName, queueName, routingKey)
-		go consumer.Work(true, consumeMessage)
+		consumers = append(consumers, mq.NewConsumer(rabbitMQ, exchangeName, queueName, routingKey))
+	}
+
+	for i := 0; i < consumerNum; i++ {
+		go consumers[i].Work(true, consumeMessage)
 	}
 }
 

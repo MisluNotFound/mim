@@ -34,7 +34,7 @@ func (r *LogicRpc) PullMessage(ctx context.Context, req *proto.PullMessageReq, r
 	// 未命中
 	if len(messages) < req.Size {
 		zap.L().Info("cache miss, get message from mysql")
-		messages, err = dao.GetMessages(req.UserID, req.TargetID, req.LastSeq, req.Size)
+		messages, err = dao.GetMessages(req.UserID, req.TargetID, req.LastSeq, req.Size, 1)
 		if err != nil {
 			resp.Code = code.CodeServerBusy
 			return err
@@ -42,13 +42,13 @@ func (r *LogicRpc) PullMessage(ctx context.Context, req *proto.PullMessageReq, r
 		fmt.Println("read message from mysql", messages)
 		go redis.WriteBack(req.UserID, messages)
 	}
-	
+
 	// 包装 map[session][]messages
 	for _, msg := range messages {
 		session := redis.GetSessionID(msg.SenderID, msg.TargetID)
 		data[session] = append(data[session], msg)
 	}
-	
+
 	offlineMessages, _ := redis.GetOfflineMessages(req.UserID)
 	fmt.Println("offline messages", offlineMessages)
 

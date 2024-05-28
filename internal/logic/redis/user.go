@@ -10,7 +10,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-var prefixOnlineUser = "online-user:"
 
 func AddOnlineUser(uid int64, sid, bucketId int) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)

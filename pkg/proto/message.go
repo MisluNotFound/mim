@@ -21,6 +21,7 @@ type PushMessageReq struct {
 	TargetID int64
 	Seq      int64
 	Body     []byte
+	Extra    interface{}
 }
 
 type PushMessageResp struct {

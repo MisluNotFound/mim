@@ -11,8 +11,8 @@ type Message struct {
 	SenderID  int64
 	TargetID  int64
 	Content   []byte
-	IsRead    bool				// true代表未读
-	DeletedAt gorm.DeletedAt	
+	IsRead    bool // true代表未读
+	DeletedAt gorm.DeletedAt
 }
 
 func (m *Message) TableName() string {
@@ -27,7 +27,10 @@ func StoreMysqlMessage(msg *Message) error {
 	return nil
 }
 
-func GetMessages(userID, targetID, start int64, size int) ([]Message, error) {
+// kind = 1 获取单聊消息 从start往前size条
+// kind = 2 获取群聊消息 从start往前size条 这两种情况下，如果start==0 则表示从最新的开始获取
+// kind = 3 群聊的离线消息 从start往后到最新
+func GetMessages(userID, targetID, start int64, size int, kind int) ([]Message, error) {
 	var messages []Message
 
 	if targetID == 0 {

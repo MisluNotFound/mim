@@ -31,7 +31,7 @@ func NewServer(bucketSize, id int, rabbitMQURL string) *Server {
 
 	buckets := make([]*Bucket, bucketSize)
 	for i := range buckets {
-		buckets[i] = NewBucket(server.RabbitMQ, server.ServerID, i)
+		buckets[i] = NewBucket(rabbitMQ, server.ServerID, i)
 	}
 
 	server.Bucket = buckets

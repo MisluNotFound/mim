@@ -56,7 +56,7 @@ func FindUserGroupsByG(gid int64) ([]*UserGroup, error) {
 
 func DelateUserGroup(uid, gid int64) error {
 	var ug UserGroup
-	if err := db.DB.Where("user_id = ? AND group_id = ?", uid, gid).Delete(&ug).Error; err != nil {
+	if err := db.DB.Where("user_id = ? AND group_id = ?", uid, gid).Unscoped().Delete(&ug).Error; err != nil {
 		return err
 	}
 

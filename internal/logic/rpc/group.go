@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 	"mim/internal/logic/dao"
+	"mim/internal/logic/redis"
 	"mim/pkg/code"
 	"mim/pkg/proto"
 	"mim/pkg/snowflake"
@@ -48,6 +49,12 @@ func (l *LogicRpc) NewGroup(ctx context.Context, req *proto.NewGroupReq, resp *p
 	if err := dao.CreateUserGroup(&ug); err != nil {
 		zap.L().Error("logic NewGroup() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if err := redis.JoinGroup(req.OwnerID, g.GroupID); err != nil {
+		resp.Code = code.CodeServerBusy
+		zap.L().Error("logic JoinGroup() failed: ", zap.Error(err))
 		return err
 	}
 
@@ -101,6 +108,12 @@ func (l *LogicRpc) JoinGroup(ctx context.Context, req *proto.JoinGroupReq, resp 
 	}
 
 	if err := dao.CreateUserGroup(&ug); err != nil {
+		resp.Code = code.CodeServerBusy
+		zap.L().Error("logic JoinGroup() failed: ", zap.Error(err))
+		return err
+	}
+
+	if err := redis.JoinGroup(req.UserID, req.GroupID); err != nil {
 		resp.Code = code.CodeServerBusy
 		zap.L().Error("logic JoinGroup() failed: ", zap.Error(err))
 		return err
