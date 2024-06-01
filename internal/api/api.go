@@ -36,6 +36,10 @@ func router() {
 	m := r.Group("/message").Use(handlers.Auth())
 	{
 		m.GET("/pull", handlers.PullMessage)
+		m.GET("/pulloffline/count", handlers.GetUnReadCount)
+		m.GET("/pulloffline", handlers.PullOfflineMessage)
+		m.GET("/pullerr", handlers.PullErrMessage)
 	}
+	
 	r.Run(":8080")
 }

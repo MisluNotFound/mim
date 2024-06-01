@@ -3,18 +3,33 @@ package redis
 import "strconv"
 
 const (
-	prefixOnlineUser         = "online:user:"
-	prefixSession            = "session:"              // 记录所有会话 prefix+userid: sender+target
-	prefixMessage            = "message:list:"         // 记录会话中的所有消息 prefix+sender+target: seq
-	prefixMessageOffline     = "session:offline:"      // 索引 记录哪些用户给目标用户发送了离线消息 prefix+uid: sender
-	prefixMessageOfflineList = "message:offline:list:" // 索引 记录离线消息列表 prefix+senderid:
-	prefixMessageList        = "message:list"          // 记录所有未接收的消息 unack
-	prefixGroupUser          = "group:users:"          // 记录群在线成员
-	prefixGroupOffline       = "group:offline:"        // 记录用户的哪些群聊有离线消息
-	prefixGroupMessage       = "group:message:"        // 记录群消息缓存
-	prefixEarlyMessage       = "early:message:"        // 记录用户入群时的时间 用于消息隔离
-	prefixLastMessage        = "last:message:"         // 记录用户离线时最后一条群消息 prefix+user: group:seq
+	prefixOnlineUser          = "online:user:"
+	prefixSession             = "session:"       // 记录所有会话 prefix+userid: sender score 1/0
+	prefixGroupUser           = "group:users:"   // 记录群在线成员
+	prefixEarlyMessage        = "early:message:" // 记录用户入群时的时间 用于消息隔离
+	prefixAckMessage          = "ack:"           // 记录用户ack err消息的seq
+	prefixSessionOfflineCount = "offline:count:" // 记录会话中的未读消息数， prefix:session: string
 )
+
+func GetSessionID(senderID, targetID int64) string {
+	senderStr := strconv.FormatInt(senderID, 10)
+	targetStr := strconv.FormatInt(targetID, 10)
+	var sessionID string
+	if senderID > targetID {
+		sessionID += targetStr + senderStr
+	} else {
+		sessionID += senderStr + targetStr
+	}
+
+	return sessionID
+}
+
+// prefixSession
+func getUserSession(uid int64) string {
+	uidStr := strconv.FormatInt(uid, 10)
+
+	return prefixSession + uidStr
+}
 
 func getOnlineUser(userID interface{}) string {
 	uidstr := ""
@@ -22,16 +37,10 @@ func getOnlineUser(userID interface{}) string {
 	case int64:
 		uidstr = strconv.FormatInt(v, 10)
 	case string:
-		uidstr = v // 如果已经是字符串类型，直接使用
+		uidstr = v
 	}
 
 	return prefixOnlineUser + uidstr
-}
-
-func getGroupOffline(userID int64) string {
-	uidstr := strconv.FormatInt(userID, 10)
-
-	return prefixGroupOffline + uidstr
 }
 
 func getGroupUser(groupID int64) string {
@@ -40,19 +49,28 @@ func getGroupUser(groupID int64) string {
 	return prefixGroupUser + gidstr
 }
 
-func getGroupMessage(groupID int64) string {
-	gidstr := strconv.FormatInt(groupID, 10)
-
-	return prefixGroupMessage + gidstr
-}
-
-func getEarlyMessage(userID int64) string {
+func getAckMessage(userID int64) string {
 	uidstr := strconv.FormatInt(userID, 10)
 
-	return prefixEarlyMessage + uidstr
+	return prefixAckMessage + uidstr
 }
-func getLastMessage(userID int64) string {
-	uidstr := strconv.FormatInt(userID, 10)
 
-	return prefixLastMessage + uidstr
+// prefixSessionOfflineCount 我id+会话id
+func getSessionOfflineCount(userID interface{}, senderID interface{}) string {
+	uidstr := ""
+	switch v := userID.(type) {
+	case int64:
+		uidstr = strconv.FormatInt(v, 10)
+	case string:
+		uidstr = v
+	}
+
+	sessionStr := ""
+	switch v := senderID.(type) {
+	case int64:
+		sessionStr = strconv.FormatInt(v, 10)
+	case string:
+		sessionStr = v
+	}
+	return prefixSessionOfflineCount + uidstr + sessionStr
 }

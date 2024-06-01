@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	logicrpc "mim/internal/connect/logic_rpc"
 	"mim/pkg/proto"
 	"mim/setting"
@@ -54,6 +55,7 @@ func (c *Client) writeProc() {
 			if !ok {
 				zap.L().Error("write message to client failed, ", zap.Any("client", c.ID))
 				c.Conn.WriteMessage(websocket.CloseMessage, nil)
+				c.sendErrMessage(msg)
 				return
 			}
 			zap.L().Info("read msg from channel", zap.Any("msg: ", msg))
@@ -64,6 +66,7 @@ func (c *Client) writeProc() {
 			err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
 			if err != nil {
 				zap.L().Error("write message failed: ", zap.Error(err))
+				c.sendErrMessage(msg)
 				return
 			}
 			c.lock.Unlock()
@@ -139,4 +142,13 @@ func (c *Client) offline() {
 	c.server.getBucket(c.ID).RemoveClient(c.ID)
 	c.Conn.WriteJSON("close conn")
 	c.Conn.Close()
+}
+
+func (c *Client) sendErrMessage(msg []byte) {
+	// 解析
+	message := proto.MessageReq{}
+	json.Unmarshal(msg, &message)
+	message.Type = 5
+	msg, _ = json.Marshal(message)
+	c.handleMessage(msg)
 }

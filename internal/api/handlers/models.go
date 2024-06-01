@@ -29,7 +29,14 @@ type ParamLeaveGroup struct {
 }
 
 type ParamPullMessage struct {
-	LastSeq  int64 `json:"last_seq"`
-	TargetID int64 `json:"target_id"`
-	Size     int   `json:"size" binding:"required"`
+	LastSeq   int64 `json:"last_seq"`
+	SessionID int64 `json:"target_id" binding:"required"`
+	Size      int   `json:"size" binding:"required"`
+	IsGroup   bool  `json:"is_group"`
+}
+
+type ParamPullOfflineMessage struct {
+	Count     int   `json:"count" binding:"required"`
+	IsGroup   bool  `json:"is_group"`
+	SessionID int64 `json:"session_id" binding:"required"`
 }

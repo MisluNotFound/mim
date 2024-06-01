@@ -2,100 +2,32 @@
 go实现的im系统 
 
 ## issue
-0. 用户上线之后将群聊状态修改
-00. 用户上线之后拉取离线消息而不是拉取所有会话的部分消息
-000. 修改获取群消息，获取好友消息，获取未读好友消息，拉取消息逻辑
-0000. 服务器启动时consumer出错
-1. 存消息已读未读 时间戳
-2. 推拉隔离
-3. 优化查询等等
+. 修改存储消息，只存储数据库 √
+. 修改消息存储时的内容添加新增字段 √
+. 添加获取未读数的api 用于初登录（所有会话）√
+. 重写存储离线消息逻辑 √
+. 添加获取未读消息的api，用于用户点开会话时展示消息内容（单个会话） $$$测 试$$$ √
+. 修改获取历史记录逻辑，只用于获取历史记录。 
+. 添加获取失败消息的api √
+. 修改session列表的作用 √
+. prefixEarlyMessage(放入数据库中) √
+. 修改queue乱绑定问题
 
-# 流程
-用户登录，建立长连接 
-放入在线表 logic层获取用户群组在redis中维护在线用户以及用户的群聊和会话 logic开一个长连接业务
-获取未读消息 拉取
-服务器记录长连接 向logic层查询用户加入的群聊 
-    在redis中查找是否有该群
-        有则更新用户在群内的状态
-        无则将该群的user记录下来
-用户下线更新两个表中的状态
+首先，消息缓存存储在客户端
+当推送一条消息时，客户端告诉服务端已接受，服务端更新接收方的ack信息如果失败或超时则更新接收方的err信息
+客户端接收消息失败，向服务端发送请求获取seq > lastAck的消息然后去重
 
-当用户发送消息时，交由messaging层处理
-    messaging层根据消息类型进行不同操作：
-        ack消息：表示客户端接收到消息 服务端记录消息已送达 持久化该条消息 记录已读状态 如果在一定时间内没有收到ack消息则记录状态为未读并持久化
-        单聊：生成全局唯一序列号，查询用户是否在线：
-            在线：发送到用户的channel中，由ws manager发送给用户
-            离线：直接交由logic层持久化 记录未读状态   
-        群聊：生成全局唯一序列号，查询所有用户并判断是否在线：
-            与单聊一致
+消息类型添加 type，url，timer，is_group
+维护一个用户(receiver)ack表 记录lastAck的消息 通过lastAck可以获取离线消息 -> redis中
+    添加lastErr记录失败的消息，保证lastErr>=lastAck
+    当 lastAckErr === null && msgId1 > lastAck 时，更新 lastAck 为 msgId1
+    当 lastAckErr !== null :
+        msgId1 < lastAckErr 则更新 lastAck 为 msgId1
+        msgId1 >= lastAckErr 则不做处理  
 
+获取未读数api
+    lastRead记录在缓存中，ZSet user: session score count, session: lastRead 当用户点开会话时更新，lastRead = seq count = 0
+    先获取所有的lastRead，再去数据库拉取
 
-拉模式：
-    用户上线之后主动拉取会话列表，并拉取一定量的消息（所有未读+多少条已读）/（一共多少条？）
-    短链接logic先获取用户id，找session列表，从每个session列表拉若干消息id，查询消息信息拼接返回
-
-
-
-创建一个实时聊天室：
-使用Redis的发布/订阅功能创建一个频道。
-每当用户在聊天室中发送消息时，将该消息发布到频道中。
-所有订阅了该频道的用户将实时收到该消息，实现实时聊天效果。
-实现在线用户管理：
-使用Redis的集合数据类型，将每个在线用户的唯一标识添加到集合中。
-当用户上线时，将其添加到集合中；当用户下线时，将其从集合中移除。
-通过查询集合中的成员数量，可以获取在线用户的数量。
-创建一个聊天消息历史记录：
-使用Redis的列表数据类型，将每条聊天消息添加到列表的尾部。
-当需要获取聊天历史记录时，可以从列表的头部按照时间顺序遍历。
-通过控制列表的长度，可以限制历史记录的大小，保持存储在Redis中的记录数量不过度增长。
-
-表设计：
-会话列表:
-    sortedset prefix-senderid: senderid+targetid msgid/seq 长期存在
-消息列表：
-    sortedset prefix-senderid+targetid: msgid/seq msgid/seq
-离线消息列表：
-    set prefix-userid: senderid
-    list prefix-senderid: msgid/seq
-消息记录：
-    senderid， targetid， content， isread
-
-
-缓存设计：
-    消息存入缓存，异步写入数据库
-    对于文本消息 直接存储内容，对于二进制消息，文件系统存储内容，缓存存储url
-    写策略：先写redis
-
-mq层设计：
-    connect与logic层的交互使用mq
-    connect-->logic:
-        根据logic层消费者数量确定queue      logic初始化queue
-        connect将消息放入mq 保证消息只被消费一次        
-        logic处理消息放入mq         
-    logic-->connect:
-        server对应exchange
-        bucket对应queue
-        bucket作为消费者
-        bucket获取消息，在自己的map中找到user发送
-
-群聊设计：
-    redis：
-        群成员列表：set prefix-groupid
-        群消息列表：zset prefix-groupid
-        入群时间： string prefix-uid+groupid
-        最后一条消息：string
-    推消息：
-        获取群聊成员列表，在线的推送，将消息持久化，对于离线的用户只记录是否有离线消息。在成员列表中添加一个是否推送离线消息的字段，保证有离线消息时，只更新一次
-    拉消息：
-        获取离线消息会话记录，获取自己的入群时间，客户端提供最后一条消息的id，去群消息记录中尝试获取：
-            如果在缓存中获取的消息最小id比最后一条大那就是未命中，去数据库获取id>lastid的记录
-        获取完之后根据每个群聊的lastid做排序    
-
-情况：
-    用户登录，客户端本地有消息记录直接读取，获取离线消息
-        用户离线时记录服务器最后一条消息的id，拿着这个id去获取这个id到最新的消息，如果最后一条消息的id不等于id则未命中
-    用户在线，获取历史记录，客户端提供最后一条消息的id，用这个id获取前面若干条消息
-        如果提供id：
-            获取从最早-id之间的size条消息，如果数量小于size则未命中
-        如果不提供id：
-            新设备登录，获取从最早-最新的size条消息，如果数量小于size则未命中
+获取未读消息api
+    本地缓存没有时，发送请求，根据请求的session获取lastRead，去拉取消息

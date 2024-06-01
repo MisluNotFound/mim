@@ -10,6 +10,7 @@ import (
 type UserGroup struct {
 	UserID   int64
 	GroupID  int64
+	JoinTime int64 // 加入群聊时最后一条消息 用于消息隔离
 	Role     string
 	DeleteAt gorm.DeletedAt
 }
@@ -19,6 +20,12 @@ func (ug *UserGroup) TableName() string {
 }
 
 func CreateUserGroup(ug *UserGroup) error {
+	lastMessage := Message{}
+	if err := db.DB.Select("seq").Where("target_id = ?", ug.GroupID).Order("seq DESC").Limit(1).Error; err != nil {
+		return err
+	}
+
+	ug.JoinTime = lastMessage.Seq
 	if err := db.DB.Create(ug).Error; err != nil {
 		return err
 	}
