@@ -39,8 +39,8 @@ logic层通过rpcx处理api层的短链接业务，通过mq层处理connect层�
 客户端接收消息失败，向服务端发送请求获取seq > lastAck的消息然后去重
 维护一个用户(receiver)ack表，记录lastAck的消息。通过lastAck可以获取离线消息
 1. 添加lastErr记录失败的消息，保证lastErr>=lastAck
-2. 当 lastAckErr === null && msgId1 > lastAck 时，更新 lastAck 为 msgId1
-3. 当 lastAckErr !== null :
+2. 当 lastAckErr == null && msgId1 > lastAck 时，更新 lastAck 为 msgId1
+3. 当 lastAckErr != null :
    msgId1 < lastAckErr 则更新 lastAck 为 msgId1
    msgId1 >= lastAckErr 则不做处理  
 #### 离线消息设计
