@@ -74,8 +74,15 @@ func FindUserGroupsByU(uid int64) ([]*UserGroup, error) {
 	var ugs []*UserGroup
 
 	if err := db.DB.Where("user_id = ?", uid).Find(&ugs).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
 		return nil, err
 	}
 
 	return ugs, nil
+}
+
+func UpdateMyName(uid int64, gid int64, name string) error {
+	return db.DB.Model(&UserGroup{}).Where("user_id = ? AND group_id = ?", uid, gid).Update("nickname", name).Error
 }

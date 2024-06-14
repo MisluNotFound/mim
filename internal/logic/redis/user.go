@@ -121,11 +121,11 @@ func ErrMessage(uid, seq int64) error {
 }
 
 // 获取会话中的离线消息数
-func GetUnReadCount(uid int64) (map[int64]int, error) {
+func GetAllLastRead(uid int64) (map[int64]int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
 
-	// 其实是对方id
+	// 获取对方id
 	key := getUserSession(uid)
 	sessions, err := db.RDB.ZRangeByScore(ctx, key, &redis.ZRangeBy{
 		Min: "1",
@@ -157,12 +157,12 @@ func GetUnReadCount(uid int64) (map[int64]int, error) {
 		return nil, err
 	}
 
-	counts := make(map[int64]int, 0)
+	counts := make(map[int64]int64, 0)
 	for i, cmd := range cmder {
 		if val, ok := cmd.(*redis.StringCmd); ok {
 			resultStr := val.Val()
 			sessionStr := sessions[i]
-			r, _ := strconv.Atoi(resultStr)
+			r, _ := strconv.ParseInt(resultStr, 10, 64)
 			s, _ := strconv.ParseInt(sessionStr, 10, 64)
 			counts[s] = r
 		}
@@ -193,4 +193,31 @@ func ClearErrAck(uid int64, lastAck int64) error {
 
 	key := getAckMessage(uid)
 	return db.RDB.HSet(ctx, key, "last_ack", lastAck, "last_err", "+inf").Err()
+}
+
+func NearBy(userID int64, longitude, latitude float64) ([]int64, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
+	defer cancel()
+
+	key := getNearBy()
+	if err := db.RDB.Watch(ctx, func(tx *redis.Tx) error {
+		pipe := tx.Pipeline()
+
+		pipe.GeoAdd(ctx, key, &redis.GeoLocation{
+			Longitude: longitude,
+			Latitude:  latitude,
+		})
+
+		pipe.GeoRadius(ctx, key, longitude, latitude, &redis.GeoRadiusQuery{
+			Radius:   1,
+			WithDist: true,
+		})
+
+		_, err := pipe.Exec(ctx)
+		return err
+	}, key); err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }

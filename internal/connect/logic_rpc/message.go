@@ -5,9 +5,9 @@ import (
 	"mim/pkg/proto"
 )
 
-func StoreOffline(req *proto.MessageReq) error {
+func StoreOffline(req *proto.OfflineMessageReq) error {
 	resp := &proto.MessageResp{}
-	err := logicPRpc.Call(context.Background(), "Auth", req, resp)
+	err := logicSRpc.Call(context.Background(), "StoreOffline", req, resp)
 	if err != nil {
 		return err
 	}

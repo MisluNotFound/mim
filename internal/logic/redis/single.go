@@ -3,29 +3,14 @@ package redis
 import (
 	"context"
 	"mim/db"
-	"mim/internal/logic/dao"
 	"strconv"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
-// 用户突然下线，将消息记录到离线消息数量中
-func StoreOfflineMessage(msg dao.Message) error {
-
-	return nil
-}
-
-func GetUserSessions(uid int64) ([]string, error) {
-	userSessions := getUserSession(uid)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
-	defer cancel()
-
-	return db.RDB.ZRevRange(ctx, userSessions, 0, -1).Result()
-}
-
 // 记录离线消息数量
-func AddUnReadCount(uid int64, senderID int64) error {
+func AddUnReadCount(uid int64, senderID int64, seq int64) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
 
@@ -39,7 +24,8 @@ func AddUnReadCount(uid int64, senderID int64) error {
 			Member: senderStr,
 			Score:  1,
 		})
-		pipe.Incr(ctx, offlineKey)
+
+		pipe.SetNX(ctx, offlineKey, seq, 0)
 		_, err := pipe.Exec(ctx)
 		return err
 	}); err != nil {
@@ -62,7 +48,7 @@ func MarkAsRead(uid, senderID int64) error {
 			Member: senderID,
 			Score:  0,
 		})
-		pipe.Set(ctx, offlineCount, 0, 0)
+		pipe.Del(ctx, offlineCount)
 		_, err := pipe.Exec(ctx)
 		return err
 	}); err != nil {
@@ -70,4 +56,19 @@ func MarkAsRead(uid, senderID int64) error {
 	}
 
 	return nil
+}
+
+// 获取某个会话的lastRead
+func GetLastRead(uid, senderID int64) (int64, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
+	defer cancel()
+
+	offlineCount := getSessionOfflineCount(uid, senderID)
+	seqStr, err := db.RDB.Get(ctx, offlineCount).Result()
+	if err != nil {
+		return 0, err
+	}
+
+	seq, _ := strconv.ParseInt(seqStr, 10, 64)
+	return seq, nil
 }

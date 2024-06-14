@@ -6,6 +6,7 @@ import (
 	"mim/pkg/proto"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"go.uber.org/zap"
 )
 
@@ -63,7 +64,7 @@ func JoinGroup(c *gin.Context) {
 func FindGroup(c *gin.Context) {
 	p := ParamFindGroup{}
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindBodyWith(&p, binding.JSON); err != nil {
 		ResponseError(c, code.CodeInvalidParam)
 		return
 	}
@@ -104,4 +105,20 @@ func LeaveGroup(c *gin.Context) {
 	}
 
 	ResponseSuccess(c, nil)
+}
+
+func GetGroups(c *gin.Context) {
+	uid := c.GetInt64("userId")
+	req := &proto.GetGroupsReq{
+		UserID: uid,
+	}
+
+	code, data, err := rpc.GetGroups(req)
+	if err != nil {
+		zap.L().Error("LeaveGroup() failed: ", zap.Error(err))
+		ResponseError(c, code)
+		return
+	}
+
+	ResponseSuccess(c, data)
 }

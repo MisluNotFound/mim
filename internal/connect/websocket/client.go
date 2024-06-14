@@ -12,6 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
+const inactiveTimeout = 10 * time.Minute
+
 // client维持用户的ws连接
 type Client struct {
 	Conn      *websocket.Conn
@@ -50,6 +52,7 @@ func (c *Client) writeProc() {
 	for {
 		select {
 		case msg, ok := <-c.Channel:
+			c.HeartBeat = time.Now()
 			// 接收到消息之后，设置响应时间
 			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
 			if !ok {
@@ -64,23 +67,23 @@ func (c *Client) writeProc() {
 			// TODO 失败重试
 			c.lock.Lock()
 			err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
+			c.lock.Unlock()
 			if err != nil {
 				zap.L().Error("write message failed: ", zap.Error(err))
 				c.sendErrMessage(msg)
 				return
 			}
-			c.lock.Unlock()
 
 			c.HeartBeat = time.Now()
 		case <-ticker.C:
-			// c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
-			// c.lock.Lock()
-			// if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-			// 	zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
-			// 	return
-			// }
-			// c.lock.Unlock()
-			zap.L().Info("ticker ping")
+			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
+			c.lock.Lock()
+			err := c.Conn.WriteMessage(websocket.PingMessage, nil)
+			c.lock.Unlock()
+			if err != nil {
+				zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
+				return
+			}
 		case <-c.done:
 			zap.L().Error("write routine was closed by read routine")
 			return
@@ -99,13 +102,24 @@ func (c *Client) readProc() {
 			zap.L().Error("read routine was closed by write routine")
 			return
 		default:
+			if c.Conn == nil {
+				return
+			}
+
+			sinceLastActivity := time.Since(c.HeartBeat)
+
+			if sinceLastActivity > inactiveTimeout {
+				return
+			}
+
 			_, msg, err := c.Conn.ReadMessage()
 			if err != nil {
-				zap.L().Error("read message from client failed: ", zap.Error(err), zap.Any("client", c.ID))
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					c.done <- struct{}{}
-					return
+					zap.L().Error("read message from client failed: ", zap.Error(err), zap.Any("client", c.ID))
 				}
+				zap.L().Error("unknown error, connection closed", zap.Error(err))
+
+				return
 			}
 
 			c.handleMessage(msg)
@@ -140,7 +154,7 @@ func (c *Client) offline() {
 
 	// 释放资源
 	c.server.getBucket(c.ID).RemoveClient(c.ID)
-	c.Conn.WriteJSON("close conn")
+	c.Conn.WriteJSON(map[string]string{"msg": "you're offline"})
 	c.Conn.Close()
 }
 

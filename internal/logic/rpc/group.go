@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"context"
+	"fmt"
 	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/code"
@@ -206,3 +207,87 @@ func (l *LogicRpc) FindGroups(ctx context.Context, req *proto.FindGroupsReq, res
 
 	return nil
 }
+
+func (l *LogicRpc) GetGroups(ctx context.Context, req *proto.GetGroupsReq, resp *proto.GetGroupsResp) error {
+	resp.Code = code.CodeSuccess
+
+	ugs, err := dao.FindUserGroupsByU(req.UserID)
+	fmt.Println(req.UserID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	var ids []int64
+	for _, ug := range ugs {
+		ids = append(ids, ug.GroupID)
+	}
+
+	groups, err := dao.GetGroups(ids)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	resp.Groups = groups
+	return nil
+}
+
+func (r *LogicRpc) UpdateGroupName(ctx context.Context, req *proto.UpdateGroupNameReq, resp *proto.UpdateGroupNameResp) error {
+	resp.Code = code.CodeSuccess
+
+	ug, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	if ug.Role != "owner" {
+		resp.Code = code.CodePermissionDenied
+		return dao.ErrorPermissionDenied
+	}
+
+	err = dao.UpdateGroupName(req.GroupID, req.Name)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+func (r *LogicRpc) UpdateGroupPhoto(ctx context.Context, req *proto.UpdateGroupPhotoReq, resp *proto.UpdateGroupPhotoResp) error {
+	resp.Code = code.CodeSuccess
+
+	ug, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	if ug.Role != "owner" {
+		resp.Code = code.CodePermissionDenied
+		return dao.ErrorPermissionDenied
+	}
+
+	err = dao.UpdateGroupPhoto(req.GroupID, req.Avatar)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+

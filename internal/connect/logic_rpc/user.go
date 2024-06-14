@@ -39,7 +39,7 @@ func GetGroup(req *proto.FindGroupsReq) (*[]int64, error) {
 func Online(req *proto.OnlineReq) error {
 	resp := &proto.OnlineResp{}
 
-	err := logicPRpc.Call(context.Background(), "Online", req, resp)
+	err := logicSRpc.Call(context.Background(), "Online", req, resp)
 	if err != nil {
 		return err
 	}
@@ -54,10 +54,10 @@ func Online(req *proto.OnlineReq) error {
 func Offline(req *proto.OfflineReq) error {
 	resp := &proto.OfflineResp{}
 
-	err := logicPRpc.Call(context.Background(), "Offline", req, resp)
+	err := logicSRpc.Call(context.Background(), "Offline", req, resp)
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }

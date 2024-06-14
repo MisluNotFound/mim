@@ -28,7 +28,7 @@ func InitWebsocket() {
 }
 
 func serve(s *Server, w http.ResponseWriter, r *http.Request) {
-	token := r.Header.Get("Authorization")
+	token := r.URL.Query().Get("token")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

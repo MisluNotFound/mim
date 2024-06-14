@@ -30,7 +30,7 @@ func singleHandler(msg *dao.Message) {
 
 	if info.UserID == 0 {
 		// 记录离线消息数量
-		go redis.AddUnReadCount(msg.TargetID, msg.SenderID)
+		go redis.AddUnReadCount(msg.TargetID, msg.SenderID, msg.Seq)
 	} else {
 		go pushInMQ(info.ServerID, info.BucketID, req)
 	}
@@ -54,7 +54,7 @@ func groupHandler(msg *dao.Message) {
 		// 用户离线则info为空
 		if u.UserID == 0 {
 			// 记录离线消息
-			redis.AddUnReadCount(id, msg.TargetID)
+			redis.AddUnReadCount(id, msg.TargetID, msg.Seq)
 		} else if u.UserID != msg.SenderID {
 			realSender := make(map[string]int64)
 			realSender["realSender"] = msg.SenderID

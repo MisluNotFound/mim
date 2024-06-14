@@ -61,3 +61,23 @@ func FindMembers(ids []int64) ([]*User, error) {
 	return users, nil
 }
 
+func GetGroups(ids []int64) ([]Group, error) {
+	var groups []Group
+
+	if err := db.DB.Select("group_id, group_name, description").Where("group_id in ?", ids).Find(&groups).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []Group{}, nil
+		}
+		return groups, err
+	}
+
+	return groups, nil
+}
+
+func UpdateGroupName(groupID int64, name string) error {
+	return db.DB.Model(&Group{}).Where("group_id = ?", groupID).Update("group_name", name).Error
+}
+
+func UpdateGroupPhoto(groupID int64, avatar string) error {
+	return db.DB.Model(&Group{}).Where("group_id = ?", groupID).Update("avatar", avatar).Error
+}

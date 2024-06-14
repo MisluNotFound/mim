@@ -53,6 +53,13 @@ func (r *LogicRpc) PullOfflineMessage(ctx context.Context, req *proto.PullOfflin
 	resp.Code = code.CodeSuccess
 	var messages []dao.Message
 	var err error
+
+	lastRead, err := redis.GetLastRead(req.UserID, req.SessionID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
 	if req.IsGroup {
 		var ok bool
 		var ug *dao.UserGroup
@@ -69,9 +76,9 @@ func (r *LogicRpc) PullOfflineMessage(ctx context.Context, req *proto.PullOfflin
 		}
 
 		fmt.Println("user group: ", ug)
-		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, true, req.Count, ug.JoinTime)
+		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, lastRead, true, ug.JoinTime)
 	} else {
-		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, true, req.Count, 0)
+		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, lastRead, false, 0)
 	}
 	fmt.Println(req)
 
@@ -94,11 +101,13 @@ func (r *LogicRpc) PullOfflineMessage(ctx context.Context, req *proto.PullOfflin
 }
 
 // 获取会未读消息数
+
+// 获取session:lastRead
 func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCountReq, resp *proto.GetUnReadResp) error {
 	resp.Code = code.CodeSuccess
 
-	// redis获取count
-	counts, err := redis.GetUnReadCount(req.UserID)
+	// 获取lastRead
+	counts, err := redis.GetAllLastRead(req.UserID)
 	if err != nil {
 		resp.Code = code.CodeServerBusy
 		return err
@@ -119,11 +128,13 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 	for s, c := range counts {
 		info := proto.UnReadInfo{
 			SessionID: s,
-			Count:     c,
 		}
+
 		for _, m := range lastMessages {
 			if m.SenderID == s || m.TargetID == s {
 				info.LastMessage = m
+				c, _ := dao.GetUnReadCount(c, m.Seq, s, req.UserID)
+				info.Count = c
 			}
 		}
 		infos = append(infos, info)
@@ -154,5 +165,38 @@ func (r *LogicRpc) PullErrMessage(ctx context.Context, req *proto.PullErrMessage
 	}
 
 	resp.Messages = messages
+	return nil
+}
+
+func (r *LogicRpc) Online(ctx context.Context, req *proto.OnlineReq, resp *proto.OnlineResp) error {
+	resp.Code = code.CodeSuccess
+	if err := redis.AddOnlineUser(req.UserID, req.ServerID, req.BucketID); err != nil {
+		zap.L().Info("logic Online() failed: ", zap.Error(err))
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+func (r *LogicRpc) Offline(ctx context.Context, req *proto.OfflineReq, resp *proto.OfflineResp) error {
+	resp.Code = code.CodeSuccess
+
+	if err := redis.RemoveOnlineUser(req.UserID); err != nil {
+		zap.L().Error("logic Offline() failed: ", zap.Error(err))
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+func (r *LogicRpc) StoreOffline(ctx context.Context, req *proto.OfflineMessageReq, resp *proto.MessageResp) error {
+	err := redis.AddUnReadCount(req.TargetID, req.SenderID, req.Seq)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

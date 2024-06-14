@@ -2,7 +2,6 @@ package logic
 
 import (
 	"mim/internal/logic/mq"
-	"mim/internal/logic/prpc"
 	"mim/internal/logic/redis"
 	"mim/internal/logic/rpc"
 	"mim/setting"
@@ -10,7 +9,6 @@ import (
 
 func InitLogic() {
 	go rpc.InitLogicRpc()
-	go prpc.InitLogicRpc()
 	redis.Close()
 	go mq.InitMQ(setting.Conf.MQConfig.URL, setting.Conf.Exchange,
 		setting.Conf.MQConfig.Queue, setting.Conf.MQConfig.RoutingKey,

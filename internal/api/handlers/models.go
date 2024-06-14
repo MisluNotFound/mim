@@ -4,6 +4,7 @@ type ParamSignUp struct {
 	Username   string `json:"username" binding:"required"`
 	Password   string `json:"password" binding:"required"`
 	RePassword string `json:"re_password" binding:"required,eqfield=Password"`
+	Avatar     string `json:"avatar"`
 }
 
 type ParamSignIn struct {
@@ -36,7 +37,42 @@ type ParamPullMessage struct {
 }
 
 type ParamPullOfflineMessage struct {
-	Count     int   `json:"count" binding:"required"`
 	IsGroup   bool  `json:"is_group"`
 	SessionID int64 `json:"session_id" binding:"required"`
+}
+
+type ParamNearby struct {
+	Longitude float64 `json:"longitude" binding:"required"`
+	Latitude  float64 `json:"latitude" binding:"required"`
+}
+
+type ParamAddFriend struct {
+	FriendID int64 `json:"friend_id" binding:"required"`
+}
+
+type ParamRemoveFriend struct {
+	FriendID int64 `json:"friend_id" binding:"required"`
+}
+
+type ParamUpdatePhoto struct {
+	Avatar string `json:"avatar" binding:"required"`
+}
+
+type ParamUpdatePassword struct {
+	OldPassword string `json:"old_password" binding:"required"`
+	NewPassword string `json:"new_password" binding:"required"`
+	RePassword  string `json:"re_password" binding:"required,eqfield=NewPassword"`
+}
+
+type ParamUpdateName struct {
+	Name string `json:"name"`
+}
+
+type ParamUpdateFriendRemark struct {
+	FriendID int64  `json:"friend_id" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+}
+
+type ParamFindFriend struct {
+	UserID int64 `json:"user_id" binding:"required"`
 }

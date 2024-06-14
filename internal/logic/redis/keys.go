@@ -9,6 +9,7 @@ const (
 	prefixEarlyMessage        = "early:message:" // 记录用户入群时的时间 用于消息隔离
 	prefixAckMessage          = "ack:"           // 记录用户ack err消息的seq
 	prefixSessionOfflineCount = "offline:count:" // 记录会话中的未读消息数， prefix:session: string
+	prefixNearBy              = "user:nearby"    // 记录用户的位置
 )
 
 func GetSessionID(senderID, targetID int64) string {
@@ -73,4 +74,8 @@ func getSessionOfflineCount(userID interface{}, senderID interface{}) string {
 		sessionStr = v
 	}
 	return prefixSessionOfflineCount + uidstr + sessionStr
+}
+
+func getNearBy() string {
+	return prefixNearBy
 }

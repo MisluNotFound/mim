@@ -49,13 +49,11 @@ type OfflineMessageReq struct {
 	SenderID int64
 	TargetID int64
 	Seq      int64
-	Body     []byte
 }
 
 type PullOfflineMessageReq struct {
 	UserID    int64
 	SessionID int64
-	Count     int
 	IsGroup   bool
 }
 

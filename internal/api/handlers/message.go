@@ -45,9 +45,9 @@ func PullMessage(c *gin.Context) {
 func PullOfflineMessage(c *gin.Context) {
 	uid := c.GetInt64("userId")
 
-	p := &ParamPullOfflineMessage{}
+	p := ParamPullOfflineMessage{}
 
-	if err := c.ShouldBindJSON(p); err != nil {
+	if err := c.ShouldBindJSON(&p); err != nil {
 		zap.L().Error("PullOfflineMessage() Failed: ", zap.Error(err))
 		ResponseError(c, code.CodeInvalidParam)
 		return
@@ -55,7 +55,6 @@ func PullOfflineMessage(c *gin.Context) {
 
 	req := &proto.PullOfflineMessageReq{
 		UserID:    uid,
-		Count:     p.Count,
 		IsGroup:   p.IsGroup,
 		SessionID: p.SessionID,
 	}

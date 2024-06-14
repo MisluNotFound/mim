@@ -10,4 +10,7 @@ var (
 	ErrorGroupNotExist      = errors.New("群不存在")
 	ErrorGroupAlreadyJoined = errors.New("已经加入该群")
 	ErrorNotJoinGroup       = errors.New("未加入该群")
+	ErrorFriendAlreadyAdd   = errors.New("已添加好友")
+	ErrorFriendNotExist     = errors.New("未添加好友")
+	ErrorPermissionDenied   = errors.New("没有权限")
 )

@@ -4,11 +4,14 @@ server存储在线用户列表，活跃的聊天室
 package websocket
 
 import (
+	"container/heap"
 	"crypto/md5"
+	"encoding/binary"
 	logicrpc "mim/internal/connect/logic_rpc"
 	"mim/pkg/mq"
 	"mim/pkg/proto"
 	"strconv"
+	"time"
 )
 
 var Default *Server
@@ -49,7 +52,9 @@ func (s *Server) getHashCode(id int64) int {
 	h := md5.New()
 	h.Write([]byte(idStr))
 	hashBytes := h.Sum(nil)
-	hashValue := int(hashBytes[0] | hashBytes[1]<<8 | hashBytes[2]<<16 | hashBytes[3]<<24)
+
+	hashValue := int(binary.BigEndian.Uint32(hashBytes[:4]))
+
 	bucketIdx := hashValue % s.Count
 	return bucketIdx
 }
@@ -64,8 +69,16 @@ func (s *Server) assignUser(c *Client) {
 	}
 
 	b := s.Bucket[bucketIdx]
+	if b.capacity == b.cHeap.Len() {
+		b.LRU()
+	}
+
 	b.lock.Lock()
 	defer b.lock.Unlock()
+
+	c.HeartBeat = time.Now()
+
+	heap.Push(&b.cHeap, c)
 
 	b.clients[c.ID] = c
 }
@@ -82,12 +95,15 @@ func (s *Server) GetUser(id int64) (*Client, bool) {
 	defer b.lock.RUnlock()
 
 	c, ok := b.clients[id]
-	return c, ok
+	if !ok {
+		return nil, false
+	}
+
+	return c, true
 }
 
 func (s *Server) AssignInBucket(c *Client) {
 
-	s.assignUser(c)
 	req := &proto.OnlineReq{
 		UserID:   c.ID,
 		ServerID: s.ServerID,
@@ -100,6 +116,8 @@ func (s *Server) AssignInBucket(c *Client) {
 		c.lock.Unlock()
 		return
 	}
+
+	s.assignUser(c)
 }
 
 func (s *Server) Close() {

@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"context"
+	"fmt"
 	"mim/internal/logic/dao"
 	"mim/pkg/code"
 	"mim/pkg/jwt"
@@ -94,3 +95,90 @@ func (r *LogicRpc) Auth(ctx context.Context, req *proto.AuthReq, resp *proto.Aut
 	resp.Username = c.Username
 	return nil
 }
+
+func (r *LogicRpc) NearBy(ctx context.Context, req *proto.AuthReq, resp *proto.AuthResp) error {
+	resp.Code = code.CodeSuccess
+
+	// 在redis中存放并查询users
+
+	return nil
+}
+
+func (r *LogicRpc) GetInfo(ctx context.Context, req *proto.GetInfoReq, resp *proto.GetInfoResp) error {
+	resp.Code = code.CodeSuccess
+
+	u, ok, err := dao.FindUserByID(req.UserID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeUserNotExist
+		return dao.ErrorUserNotExist
+	}
+
+	resp.User = u
+	return nil
+}
+
+func (r *LogicRpc) UpdatePhoto(ctx context.Context, req *proto.UpdatePhotoReq, resp *proto.UpdatePhotoResp) error {
+	resp.Code = code.CodeSuccess
+
+	err := dao.UpdatePhoto(req.UserID, req.Avatar)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+	}
+
+	return nil
+}
+
+func (r *LogicRpc) UpdatePassword(ctx context.Context, req *proto.UpdatePasswordReq, resp *proto.UpdatePasswordResp) error {
+	resp.Code = code.CodeSuccess
+
+	u, ok, err := dao.FindUserByID(req.UserID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeUserNotExist
+		return dao.ErrorInvalidID
+	}
+
+	if u.Password != dao.Encrypt(req.OldPassword) {
+		resp.Code = code.CodeInvalidPassword
+		return dao.ErrorInvalidPassword
+	}
+
+	err = dao.UpdatePassword(req.UserID, req.NewPassword)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+func (r *LogicRpc) UpdateName(ctx context.Context, req *proto.UpdateNameReq, resp *proto.UpdateNameResp) error {
+	resp.Code = code.CodeSuccess
+
+	_, ok, _ := dao.FindUserByName(req.Name)
+
+	fmt.Println("username ", req.Name)
+	if ok {
+		resp.Code = code.CodeUserExist
+		return dao.ErrorUserExist
+	}
+
+	err := dao.UpdateName(req.UserID, req.Name)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	return nil
+}
+
+

@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"fmt"
 	"mim/db"
 	"time"
 
@@ -48,21 +47,29 @@ func GetLastMessage(senders []int64, targetID int64) ([]Message, error) {
 	return lastMessages, nil
 }
 
-func PullOfflineMessage(userID, senderID int64, isGroup bool, count int, joinTime int64) ([]Message, error) {
+func GetUnReadCount(lastRead int64, lastMessage int64, sender int64, target int64) (int, error) {
+	var c int64
+	if err := db.DB.Model(&Message{}).Where("seq BETWEEN ? AND ? AND ((sender_id = ? AND target_id = ?) OR (sender_id = ? AND target_id = ?))",
+		lastRead, lastMessage, sender, target, target, sender).Count(&c).Error; err != nil {
+		return 0, err
+	}
+
+	return int(c), nil
+}
+
+func PullOfflineMessage(userID, sessionID int64, lastRead int64, isGroup bool, joinTime int64) ([]Message, error) {
 	var messages []Message
 	var err error
-	fmt.Println(count)
 	if isGroup {
+		seq := max(lastRead, joinTime)
 		err = db.DB.Select("seq, sender_id, target_id, content, type, url, timer, is_group").
-			Where("sender_id = ? AND target_id = ? AND seq > ?", senderID, userID, joinTime).
+			Where("target_id = ? AND seq > ?", sessionID, seq).
 			Order("seq DESC").
-			Limit(count).
 			Find(&messages).Error
 	} else {
 		err = db.DB.Select("seq, sender_id, target_id, content, type, url, timer, is_group").
-			Where("sender_id = ? AND target_id = ?", senderID, userID).
+			Where("sender_id = ? AND target_id = ? AND seq >= ?", sessionID, userID, lastRead).
 			Order("seq DESC").
-			Limit(count).
 			Find(&messages).Error
 	}
 
