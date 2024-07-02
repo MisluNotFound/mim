@@ -11,8 +11,10 @@ type Group struct {
 	GroupID     int64
 	GroupName   string
 	Description string
-	Members     []*User `gorm:"-"`
+	Avatar      string
 	DeleteAt    gorm.DeletedAt
+	Members     []*User `gorm:"-"`
+	MyRemark    string  `gorm:"-"`
 }
 
 const (
@@ -54,7 +56,7 @@ func FindGroupByID(id int64) (*Group, bool, error) {
 
 func FindMembers(ids []int64) ([]*User, error) {
 	var users []*User
-	if err := db.DB.Select("id", "username").Where("id in ?", ids).Find(&users).Error; err != nil {
+	if err := db.DB.Select("id", "username", "avatar").Where("id in ?", ids).Find(&users).Error; err != nil {
 		return nil, err
 	}
 
@@ -64,7 +66,7 @@ func FindMembers(ids []int64) ([]*User, error) {
 func GetGroups(ids []int64) ([]Group, error) {
 	var groups []Group
 
-	if err := db.DB.Select("group_id, group_name, description").Where("group_id in ?", ids).Find(&groups).Error; err != nil {
+	if err := db.DB.Select("group_id, group_name, description, avatar").Where("group_id in ?", ids).Find(&groups).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []Group{}, nil
 		}
@@ -80,4 +82,8 @@ func UpdateGroupName(groupID int64, name string) error {
 
 func UpdateGroupPhoto(groupID int64, avatar string) error {
 	return db.DB.Model(&Group{}).Where("group_id = ?", groupID).Update("avatar", avatar).Error
+}
+
+func DeleteGroup(groupID int64) error {
+	return db.DB.Where("group_id = ?", groupID).Delete(&Group{}).Error
 }

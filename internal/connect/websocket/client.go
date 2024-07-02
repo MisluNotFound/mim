@@ -39,51 +39,49 @@ func NewClient(id int64, username string, size int) *Client {
 }
 
 func (c *Client) writeProc() {
-	// 发送消息协程
-	// 1. 心跳检测
 	ticker := time.NewTicker(setting.Conf.WsConfig.TickerPeriod)
 	defer func() {
 		c.done <- struct{}{}
 		ticker.Stop()
 		c.offline()
 	}()
-	// 2. 接收消息
 
 	for {
 		select {
 		case msg, ok := <-c.Channel:
 			c.HeartBeat = time.Now()
-			// 接收到消息之后，设置响应时间
 			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
 			if !ok {
 				zap.L().Error("write message to client failed, ", zap.Any("client", c.ID))
-				c.Conn.WriteMessage(websocket.CloseMessage, nil)
+				writeCloseMessage(c.Conn, websocket.CloseInternalServerErr, "Set Deadline Error")
 				c.sendErrMessage(msg)
 				return
 			}
 			zap.L().Info("read msg from channel", zap.Any("msg: ", msg))
 
 			var err error
-			// TODO 失败重试
 			c.lock.Lock()
 			err = c.Conn.WriteMessage(websocket.BinaryMessage, msg)
 			c.lock.Unlock()
 			if err != nil {
 				zap.L().Error("write message failed: ", zap.Error(err))
+				writeCloseMessage(c.Conn, websocket.CloseInternalServerErr, "Write Error")
 				c.sendErrMessage(msg)
 				return
 			}
 
 			c.HeartBeat = time.Now()
-		case <-ticker.C:
-			c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
-			c.lock.Lock()
-			err := c.Conn.WriteMessage(websocket.PingMessage, nil)
-			c.lock.Unlock()
-			if err != nil {
-				zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
-				return
-			}
+		// case <-ticker.C:
+		// 	c.Conn.SetWriteDeadline(time.Now().Add(setting.Conf.WsConfig.WriteDeadline))
+		// 	c.lock.Lock()
+		// 	err := c.Conn.WriteMessage(websocket.PingMessage, nil)
+		// 	zap.L().Info("sending ping message")
+		// 	c.lock.Unlock()
+		// 	if err != nil {
+		// 		zap.L().Error("write ping message failed: ", zap.Error(err), zap.Any("client", c.ID))
+		// 		writeCloseMessage(c.Conn, websocket.CloseInternalServerErr, "Write Error")
+		// 		return
+		// 	}
 		case <-c.done:
 			zap.L().Error("write routine was closed by read routine")
 			return
@@ -107,8 +105,8 @@ func (c *Client) readProc() {
 			}
 
 			sinceLastActivity := time.Since(c.HeartBeat)
-
 			if sinceLastActivity > inactiveTimeout {
+				writeCloseMessage(c.Conn, websocket.CloseNoStatusReceived, "")
 				return
 			}
 
@@ -119,9 +117,9 @@ func (c *Client) readProc() {
 				}
 				zap.L().Error("unknown error, connection closed", zap.Error(err))
 
+				writeCloseMessage(c.Conn, websocket.CloseInternalServerErr, "Not Activity")
 				return
 			}
-
 			c.handleMessage(msg)
 		}
 	}
@@ -154,15 +152,24 @@ func (c *Client) offline() {
 
 	// 释放资源
 	c.server.getBucket(c.ID).RemoveClient(c.ID)
-	c.Conn.WriteJSON(map[string]string{"msg": "you're offline"})
 	c.Conn.Close()
 }
 
 func (c *Client) sendErrMessage(msg []byte) {
+	zap.L().Info("send err message")
 	// 解析
 	message := proto.MessageReq{}
 	json.Unmarshal(msg, &message)
 	message.Type = 5
 	msg, _ = json.Marshal(message)
 	c.handleMessage(msg)
+}
+
+func writeCloseMessage(conn *websocket.Conn, code int, reason string) {
+	zap.L().Info("write close message", zap.String("msg", reason))
+	message := websocket.FormatCloseMessage(code, reason)
+	err := conn.WriteControl(websocket.CloseMessage, message, time.Now().Add(time.Second))
+	if err != nil {
+		zap.L().Error("write close message failed", zap.Error(err))
+	}
 }

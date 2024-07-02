@@ -25,7 +25,7 @@ websocket:
   read_buffer_size: 1024
   write_buffer_size: 1024
   address: ":8082"
-  ticker_period: 5m
+  ticker_period: 10m
   read_deadline: 10s
   write_deadline: 10s
   max_retries: 3

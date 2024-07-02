@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/code"
@@ -14,8 +14,11 @@ import (
 // 获取历史记录
 func (r *LogicRpc) PullMessage(ctx context.Context, req *proto.PullMessageReq, resp *proto.PullMessageResp) error {
 	resp.Code = code.CodeSuccess
-	fmt.Println("userID", req.UserID, "seq", req.LastSeq, "sessionID", req.SessionID)
+
 	// 判断是否为群
+	if req.LastSeq == 0 {
+		req.LastSeq = math.MaxInt64
+	}
 	if req.IsGroup {
 		// 获取入群时间
 		ug, ok, err := dao.IsJoined(req.UserID, req.SessionID)
@@ -75,14 +78,11 @@ func (r *LogicRpc) PullOfflineMessage(ctx context.Context, req *proto.PullOfflin
 			return nil
 		}
 
-		fmt.Println("user group: ", ug)
 		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, lastRead, true, ug.JoinTime)
 	} else {
 		messages, err = dao.PullOfflineMessage(req.UserID, req.SessionID, lastRead, false, 0)
 	}
-	fmt.Println(req)
 
-	fmt.Println(messages)
 	if err != nil {
 		zap.L().Error("pull offline message failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
@@ -131,10 +131,35 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 		}
 
 		for _, m := range lastMessages {
-			if m.SenderID == s || m.TargetID == s {
-				info.LastMessage = m
-				c, _ := dao.GetUnReadCount(c, m.Seq, s, req.UserID)
-				info.Count = c
+			// 如果是群聊 查询群聊备注 头像
+			if m.IsGroup {
+				group, _, err := dao.FindGroupByID(m.TargetID)
+				if err != nil {
+					zap.L().Error("get group detail failed: ", zap.Error(err))
+				}
+				info.Avatar = group.Avatar
+				info.Remark = group.GroupName
+			} else {
+				// 如果是单聊 查询好友备注 头像
+				friend, _ := dao.GetFriend(m.SenderID, m.TargetID)
+				var friendID int64
+				if friend.UserA == req.UserID {
+					friendID = friend.UserB
+					info.Remark = friend.AtoB
+				} else {
+					friendID = friend.UserA
+					info.Remark = friend.BtoA
+				}
+				avatar, err := dao.GetUserPhoto(friendID)
+				if err != nil {
+					zap.L().Error("get user photo failed: ", zap.Error(err))
+				}
+				info.Avatar = avatar
+				if m.SenderID == s || m.TargetID == s {
+					info.LastMessage = m
+					c, _ := dao.GetUnReadCount(c, m.Seq, s, req.UserID)
+					info.Count = c
+				}
 			}
 		}
 		infos = append(infos, info)

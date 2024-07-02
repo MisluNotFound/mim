@@ -1,6 +1,3 @@
-/*
-server存储在线用户列表，活跃的聊天室
-*/
 package websocket
 
 import (

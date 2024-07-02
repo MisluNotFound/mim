@@ -6,6 +6,7 @@ import (
 	"mim/internal/logic/dao"
 	"mim/pkg/mq"
 	"mim/pkg/proto"
+	"strconv"
 
 	"github.com/streadway/amqp"
 )
@@ -28,25 +29,24 @@ func consumeMessage(messages <-chan amqp.Delivery) {
 		// 解析消息
 		p := proto.MessageReq{}
 		json.Unmarshal(d.Body, &p)
+
+		fmt.Println("logic consumer receive message", p)
+		target, _ := strconv.ParseInt(p.TargetID, 10, 64)
 		msg := dao.Message{
+			Seq:      p.Seq,
 			SenderID: p.SenderID,
-			TargetID: p.TargetID,
+			TargetID: target,
 			Content:  p.Body,
 			Type:     p.Media,
 			URL:      p.URL,
 		}
-		fmt.Println("logic consumer receive message", d.Body)
 		switch p.Type {
 		case TypeSingle:
 			go singleHandler(&msg)
-			d.Ack(false)
 		case TypeGroup:
 			go groupHandler(&msg)
-			d.Ack(false)
 		case TypeAck:
 			go ackHandler(&msg)
-		case TypePong:
-
 		case TypeErr:
 			go errHandler(&msg)
 		}

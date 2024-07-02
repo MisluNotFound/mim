@@ -50,7 +50,7 @@ func (c *Consumer) Work(isWork bool, handler func(<-chan amqp.Delivery)) {
 		zap.L().Info("set qos success")
 	}
 
-	msgs, err := c.rabbitMQ.Consume(c.queueName, "", false, false, false, false, nil)
+	msgs, err := c.rabbitMQ.Consume(c.queueName, "", true, false, false, false, nil)
 	if err != nil {
 		zap.L().Error("consume message failed: ", zap.Error(err), zap.Any("consumer", c.Tag), zap.Any("queue", c.queueName))
 		return

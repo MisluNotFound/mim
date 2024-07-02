@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"mim/pkg/code"
 	"mim/pkg/jwt"
 	"strings"
@@ -12,7 +11,6 @@ import (
 func Auth() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
-		fmt.Println(authHeader)
 
 		if authHeader == "" {
 			ResponseError(c, code.CodeUnAuth)
@@ -43,16 +41,13 @@ func Auth() func(c *gin.Context) {
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // 添加 Authorization 到允许的请求头部
-
-		// 如果请求方法是 OPTIONS，则表示预检请求，直接返回
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE, UPDATE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(200)
 			return
 		}
 
-		// 继续处理请求
 		c.Next()
 	}
 }

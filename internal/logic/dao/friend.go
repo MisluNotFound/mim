@@ -70,7 +70,7 @@ func GetFriends(userID int64) ([]Friend, error) {
 func GetFriendsInfo(ids []int64) ([]User, error) {
 	users := []User{}
 
-	if err := db.DB.Select("id, username").Where("id in ?", ids).Find(&users).Error; err != nil {
+	if err := db.DB.Select("id, username, avatar").Where("id in ?", ids).Find(&users).Error; err != nil {
 		return users, err
 	}
 

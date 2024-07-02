@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"mim/db"
 	"strconv"
 	"time"
@@ -37,6 +38,7 @@ func GetUsersInfo(groupID int64) (map[int64]UserInfo, error) {
 	users := db.RDB.SMembers(ctx, groupKey).Val()
 	var userKeys []string
 
+	fmt.Println(users)
 	// 键和结果集
 	userInfos := make(map[int64]UserInfo)
 	for _, userID := range users {
@@ -45,6 +47,7 @@ func GetUsersInfo(groupID int64) (map[int64]UserInfo, error) {
 		userInfos[uid] = UserInfo{}
 	}
 
+	fmt.Println(userKeys)
 	var cmds []redis.Cmder
 	err := db.RDB.Watch(ctx, func(tx *redis.Tx) error {
 		pipe := tx.TxPipeline()
@@ -70,7 +73,7 @@ func GetUsersInfo(groupID int64) (map[int64]UserInfo, error) {
 		if len(results) == 0 {
 			continue
 		}
-
+		fmt.Println(results)
 		id, _ := strconv.ParseInt(results["user_id"], 10, 64)
 		sid, _ := strconv.Atoi(results["server_id"])
 		bid, _ := strconv.Atoi(results["bucket_id"])
@@ -82,4 +85,12 @@ func GetUsersInfo(groupID int64) (map[int64]UserInfo, error) {
 	}
 
 	return userInfos, nil
+}
+
+func DelGroup(groupID int64) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
+	defer cancel()
+
+	key := getGroupUser(groupID)
+	return db.RDB.Del(ctx, key).Err()
 }

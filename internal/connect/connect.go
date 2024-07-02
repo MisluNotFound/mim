@@ -13,7 +13,3 @@ func InitConnect() {
 	go websocket.InitWebsocket()
 	go logicrpc.InitLogicRpc()
 }
-
-func Close() {
-
-}

@@ -7,8 +7,9 @@ import (
 )
 
 type MessageReq struct {
+	Seq      int64
 	SenderID int64
-	TargetID int64
+	TargetID string
 	Ack      int64
 	Type     int
 	Body     []byte
@@ -24,6 +25,8 @@ type PushMessageReq struct {
 	TargetID int64
 	Seq      int64
 	Body     []byte
+	Type     string
+	URL      string
 	Timer    time.Time
 	Extra    interface{}
 }
@@ -63,6 +66,8 @@ type GetUnReadCountReq struct {
 
 type UnReadInfo struct {
 	SessionID   int64
+	Remark      string
+	Avatar      string
 	Count       int
 	LastMessage dao.Message
 }

@@ -13,18 +13,24 @@ import (
 )
 
 type tempToken struct {
-	accessKeyId     string
-	accessKeySecret string
-	securityToken   string
-	expiration      string
+	AccessKeyId     string
+	AccessKeySecret string
+	SecurityToken   string
+	Expiration      string
 }
 
 func GetOssCredentials(c *gin.Context) {
 	accessKeyID := os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
 	accessKeySecret := os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
 
+	if accessKeyID == "" || accessKeySecret == "" {
+		zap.L().Error("Environment variables not set")
+		ResponseError(c, code.CodeServerBusy)
+		return
+	}
 	client, err := sts.NewClientWithAccessKey("cn-qingdao", accessKeyID, accessKeySecret)
 	if err != nil {
+		zap.L().Error("get temp token failed:", zap.Error(err))
 		ResponseError(c, code.CodeServerBusy)
 		return
 	}
@@ -39,15 +45,16 @@ func GetOssCredentials(c *gin.Context) {
 
 	response, err := client.AssumeRole(request)
 	if err != nil {
+		zap.L().Error("get temp token failed:", zap.Error(err))
 		ResponseError(c, code.CodeServerBusy)
 		return
 	}
 
 	token := tempToken{
-		accessKeyId:     response.Credentials.AccessKeyId,
-		accessKeySecret: response.Credentials.AccessKeySecret,
-		securityToken:   response.Credentials.SecurityToken,
-		expiration:      response.Credentials.Expiration,
+		AccessKeyId:     response.Credentials.AccessKeyId,
+		AccessKeySecret: response.Credentials.AccessKeySecret,
+		SecurityToken:   response.Credentials.SecurityToken,
+		Expiration:      response.Credentials.Expiration,
 	}
 	zap.L().Info("temporary token:", zap.Any("info", token))
 

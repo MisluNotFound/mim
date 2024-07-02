@@ -61,8 +61,9 @@ func consumeMessage(messages <-chan amqp.Delivery) {
 			logicrpc.StoreOffline(req)
 		}
 
-		c.Channel <- d.Body
-		d.Ack(false)
+		if (c.Channel != nil) {
+			c.Channel <- d.Body
+		}
 	}
 }
 

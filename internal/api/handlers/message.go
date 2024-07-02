@@ -15,7 +15,7 @@ func PullMessage(c *gin.Context) {
 
 	p := ParamPullMessage{}
 
-	if err := c.ShouldBindJSON(&p); err != nil {
+	if err := c.ShouldBindQuery(&p); err != nil {
 		zap.L().Error(err.Error())
 		ResponseError(c, code.CodeInvalidParam)
 		return

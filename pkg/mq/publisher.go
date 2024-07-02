@@ -33,10 +33,10 @@ func NewPublisher(rabbitMQ *RabbitMQ) *Publisher {
 func (p *Publisher) PublishMessage(body []byte, exchange, routingKey, queueName string) error {
 	fmt.Printf("publisher send message to %s %s \n", exchange, queueName)
 	err := p.rabbitMQ.PublisherChannel.Publish(
-		exchange,   // 交换机名称
-		routingKey, // 路由键
-		false,      // 如果没有队列绑定到交换机，是否返回消息
-		false,      // 如果没有立即被消费者消费，是否返回消息
+		exchange,   
+		routingKey, 
+		false,      
+		false,      
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
 			ContentType:  "text/plain",

@@ -68,3 +68,51 @@ func GetGroups(req *proto.GetGroupsReq) (code.ResCode, []dao.Group, error) {
 
 	return resp.Code, resp.Groups, nil
 }
+
+func GetMembers(req *proto.GetMembersReq) (code.ResCode, interface{}, error) {
+	resp := &proto.GetMembersResp{}
+
+	err := logicRpc.Call(context.Background(), "GetMembers", req, resp)
+	if err != nil {
+		zap.L().Error("GetMembers() call logic failed: ", zap.Error(err))
+		return resp.Code, []dao.User{}, err
+	}
+
+	return resp.Code, resp.Members, nil
+}
+
+func GetRole(req *proto.GetRoleReq) (code.ResCode, interface{}, error) {
+	resp := &proto.GetRoleResp{}
+
+	err := logicRpc.Call(context.Background(), "GetRole", req, resp)
+	if err != nil {
+		zap.L().Error("GetRole() call logic failed: ", zap.Error(err))
+		return resp.Code, nil, err
+	}
+
+	return resp.Code, resp.Role, nil
+}
+
+func UpdateGroupPhoto(req *proto.UpdateGroupPhotoReq) (code.ResCode, error) { 
+	resp := &proto.UpdateGroupPhotoResp{}
+
+	err := logicRpc.Call(context.Background(), "UpdateGroupPhoto", req, resp)
+	if err != nil {
+		zap.L().Error("UpdateGroupPhoto() call logic failed: ", zap.Error(err))
+		return resp.Code,  err
+	}
+
+	return resp.Code, nil
+}
+
+func RemoveMember(req *proto.RemoveMemberReq) (code.ResCode, error) {
+	resp := &proto.RemoveMemberResp{}
+
+	err := logicRpc.Call(context.Background(), "RemoveMember", req, resp)
+	if err != nil {
+		zap.L().Error("RemoveMember() call logic failed: ", zap.Error(err))
+		return resp.Code, err
+	}
+
+	return resp.Code, nil
+}

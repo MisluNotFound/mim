@@ -12,18 +12,30 @@ import (
 	"go.uber.org/zap"
 )
 
-func getMembers(id int64) ([]*dao.User, error) {
+func getMembers(id int64) ([]proto.UserInfo, error) {
 	ugs, err := dao.FindUserGroupsByG(id)
 	if err != nil {
 		return nil, err
 	}
 
 	var ids []int64
-	for _, ug := range ugs {
+	members := make([]proto.UserInfo, len(ugs))
+	for i, ug := range ugs {
+		members[i] = proto.UserInfo{
+			Role: ug.Role,
+		}
 		ids = append(ids, ug.UserID)
 	}
 
-	return dao.FindMembers(ids)
+	users, err := dao.FindMembers(ids)
+	if err != nil {
+		return []proto.UserInfo{}, err
+	}
+	for i, u := range users {
+		members[i].Member = *u
+	}
+
+	return members, nil
 }
 
 func (l *LogicRpc) NewGroup(ctx context.Context, req *proto.NewGroupReq, resp *proto.NewGroupResp) error {
@@ -58,16 +70,6 @@ func (l *LogicRpc) NewGroup(ctx context.Context, req *proto.NewGroupReq, resp *p
 		zap.L().Error("logic JoinGroup() failed: ", zap.Error(err))
 		return err
 	}
-
-	users, err := getMembers(g.GroupID)
-
-	if err != nil {
-		resp.Code = code.CodeServerBusy
-		zap.L().Error("logic NewGroup() failed: ", zap.Error(err))
-		return err
-	}
-
-	g.Members = users
 
 	resp.Group = &g
 	return nil
@@ -120,15 +122,6 @@ func (l *LogicRpc) JoinGroup(ctx context.Context, req *proto.JoinGroupReq, resp 
 		return err
 	}
 
-	users, err := getMembers(req.GroupID)
-	if err != nil {
-		resp.Code = code.CodeServerBusy
-		zap.L().Error("logic JoinGroup() failed: ", zap.Error(err))
-		return err
-	}
-
-	g.Members = users
-
 	resp.Group = g
 
 	return nil
@@ -150,15 +143,6 @@ func (l *LogicRpc) FindGroup(ctx context.Context, req *proto.FindGroupReq, resp 
 		return dao.ErrorGroupNotExist
 	}
 
-	users, err := getMembers(req.GroupID)
-	if err != nil {
-		zap.L().Error("logic FindGroup() failed: ", zap.Error(err))
-		resp.Code = code.CodeServerBusy
-		return err
-	}
-
-	g.Members = users
-
 	resp.Group = g
 	return nil
 }
@@ -166,7 +150,7 @@ func (l *LogicRpc) FindGroup(ctx context.Context, req *proto.FindGroupReq, resp 
 func (l *LogicRpc) LeaveGroup(ctx context.Context, req *proto.LeaveGroupReq, resp *proto.LeaveGroupResp) error {
 	resp.Code = code.CodeSuccess
 
-	_, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+	ug, ok, err := dao.IsJoined(req.UserID, req.GroupID)
 	if err != nil {
 		zap.L().Error("logic LeaveGroup() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
@@ -179,31 +163,21 @@ func (l *LogicRpc) LeaveGroup(ctx context.Context, req *proto.LeaveGroupReq, res
 		return dao.ErrorNotJoinGroup
 	}
 
-	if err := dao.DelateUserGroup(req.UserID, req.GroupID); err != nil {
+	if err := dao.DeleteUserGroup(req.UserID, req.GroupID); err != nil {
 		zap.L().Error("logic LeaveGroup() failed: ", zap.Error(err))
 		resp.Code = code.CodeServerBusy
 		return err
 	}
 
-	return nil
-}
-
-func (l *LogicRpc) FindGroups(ctx context.Context, req *proto.FindGroupsReq, resp *proto.FindGroupsResp) error {
-	resp.Code = code.CodeSuccess
-
-	ugs, err := dao.FindUserGroupsByU(req.UserID)
-	if err != nil {
-		zap.L().Error("logic FindGroups() failed: ", zap.Error(err))
-		resp.Code = code.CodeServerBusy
-		return err
+	redis.LeaveGroup(req.UserID, req.GroupID)
+	if ug.Role == dao.Owner {
+		err := dao.DeleteGroup(req.GroupID)
+		redis.DelGroup(req.GroupID)
+		if err != nil {
+			resp.Code = code.CodeServerBusy
+			return err
+		}
 	}
-
-	var gids []int64
-	for _, ug := range ugs {
-		gids = append(gids, ug.GroupID)
-	}
-
-	resp.Groups = &gids
 
 	return nil
 }
@@ -212,7 +186,6 @@ func (l *LogicRpc) GetGroups(ctx context.Context, req *proto.GetGroupsReq, resp 
 	resp.Code = code.CodeSuccess
 
 	ugs, err := dao.FindUserGroupsByU(req.UserID)
-	fmt.Println(req.UserID)
 	if err != nil {
 		resp.Code = code.CodeServerBusy
 		return err
@@ -230,6 +203,7 @@ func (l *LogicRpc) GetGroups(ctx context.Context, req *proto.GetGroupsReq, resp 
 	}
 
 	resp.Groups = groups
+	fmt.Println(resp.Groups)
 	return nil
 }
 
@@ -291,3 +265,87 @@ func (r *LogicRpc) UpdateGroupPhoto(ctx context.Context, req *proto.UpdateGroupP
 	return nil
 }
 
+func (r *LogicRpc) GetMembers(ctx context.Context, req *proto.GetMembersReq, resp *proto.GetMembersResp) error {
+	resp.Code = code.CodeSuccess
+
+	_, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	members, err := getMembers(req.GroupID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	resp.Members = members
+
+	return nil
+}
+
+func (r *LogicRpc) GetRole(ctx context.Context, req *proto.GetRoleReq, resp *proto.GetRoleResp) error {
+	resp.Code = code.CodeSuccess
+
+	ug, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	resp.Role = ug.Role
+	return nil
+}
+
+func (r *LogicRpc) RemoveMember(ctx context.Context, req *proto.RemoveMemberReq, resp *proto.RemoveMemberResp) error {
+	resp.Code = code.CodeSuccess
+
+	ownerUg, ok, err := dao.IsJoined(req.UserID, req.GroupID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	if ownerUg.Role != dao.Owner {
+		resp.Code = code.CodePermissionDenied
+		return dao.ErrorPermissionDenied
+	}
+
+	_, ok, err = dao.IsJoined(req.MemberID, req.GroupID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	if !ok {
+		resp.Code = code.CodeNotJoinGroup
+		return dao.ErrorNotJoinGroup
+	}
+
+	err = dao.DeleteUserGroup(req.MemberID, req.GroupID)
+	if err != nil {
+		resp.Code = code.CodeServerBusy
+		return err
+	}
+
+	redis.LeaveGroup(req.MemberID, req.UserID)
+
+	return nil
+}

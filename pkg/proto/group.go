@@ -63,8 +63,18 @@ type GetGroupsResp struct {
 }
 
 type GetMembersReq struct {
-	Code  code.ResCode
-	Users []dao.User
+	UserID  int64
+	GroupID int64
+}
+
+type UserInfo struct {
+	Member dao.User
+	Role   string
+}
+
+type GetMembersResp struct {
+	Code    code.ResCode
+	Members []UserInfo
 }
 
 type UpdateGroupNameReq struct {
@@ -94,5 +104,25 @@ type UpdateMyNameReq struct {
 }
 
 type UpdateMyNameResp struct {
+	Code code.ResCode
+}
+
+type GetRoleReq struct {
+	UserID  int64
+	GroupID int64
+}
+
+type GetRoleResp struct {
+	Code code.ResCode
+	Role string
+}
+
+type RemoveMemberReq struct {
+	UserID   int64
+	MemberID int64
+	GroupID int64
+}
+
+type RemoveMemberResp struct {
 	Code code.ResCode
 }

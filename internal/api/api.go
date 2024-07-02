@@ -1,4 +1,3 @@
-// api层负责为客户端提供基本服务的接口并交由logic层处理返回响应结果
 package api
 
 import (
@@ -51,7 +50,11 @@ func router() {
 		g.POST("/join", handlers.JoinGroup)
 		g.GET("/find", handlers.FindGroup)
 		g.GET("/getall", handlers.GetGroups)
-		g.DELETE("/leave", handlers.LeaveGroup)
+		g.POST("/leave", handlers.LeaveGroup)
+		g.GET("/members", handlers.GetMembers)
+		g.GET("/role", handlers.GetRole)
+		g.POST("/update/photo", handlers.UpdateGroupPhoto)
+		g.POST("/remove/member", handlers.RemoveMember)
 	}
 
 	m := r.Group("/message").Use(handlers.Auth())

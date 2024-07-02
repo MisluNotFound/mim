@@ -6,7 +6,6 @@ import (
 	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
 	"mim/pkg/proto"
-	"mim/pkg/snowflake"
 	"strconv"
 	"time"
 
@@ -19,17 +18,20 @@ func singleHandler(msg *dao.Message) {
 		zap.L().Error("singleHandler() failed: ", zap.Error(err))
 		return
 	}
-	msg.Seq = snowflake.GenID()
+	// msg.Seq = snowflake.GenID()
 
 	req := proto.PushMessageReq{
 		SenderID: msg.SenderID,
 		TargetID: msg.TargetID,
 		Body:     msg.Content,
+		Type:     msg.Type,
+		URL:      msg.URL,
 		Seq:      msg.Seq,
 	}
 
+	fmt.Println("userinfo", info)
 	if info.UserID == 0 {
-		// 记录离线消息数量
+		// 记录离线消息
 		go redis.AddUnReadCount(msg.TargetID, msg.SenderID, msg.Seq)
 	} else {
 		go pushInMQ(info.ServerID, info.BucketID, req)
@@ -41,7 +43,8 @@ func singleHandler(msg *dao.Message) {
 
 func groupHandler(msg *dao.Message) {
 	fmt.Println("groupHandler receive message")
-	msg.Seq = snowflake.GenID()
+	// msg.Seq = snowflake.GenID()
+	fmt.Println(msg)
 	msg.IsGroup = true
 	// 先查询所有成员的状态
 	userInfos, err := redis.GetUsersInfo(msg.TargetID)
@@ -49,8 +52,10 @@ func groupHandler(msg *dao.Message) {
 		zap.L().Error("singleHandler() failed: ", zap.Error(err))
 		return
 	}
+	fmt.Println("userInfos", userInfos)
 	// 根据成员状态异步处理
 	for id, u := range userInfos {
+		fmt.Println("userinfo		", u)
 		// 用户离线则info为空
 		if u.UserID == 0 {
 			// 记录离线消息
@@ -66,6 +71,8 @@ func groupHandler(msg *dao.Message) {
 				Seq:      msg.Seq,
 				Body:     msg.Content,
 				Timer:    time.Now(),
+				Type:     msg.Type,
+				URL:      msg.URL,
 				// 谁发的
 				Extra: realSender,
 			}
@@ -76,12 +83,9 @@ func groupHandler(msg *dao.Message) {
 	go asyncSaveMessage(*msg)
 }
 
-func pongHandler(msg *dao.Message) {
-
-}
-
 func ackHandler(msg *dao.Message) {
 	err := redis.AckMessage(msg.TargetID, msg.Seq)
+	fmt.Println("ack handler receive message", msg)
 	if err != nil {
 		zap.L().Error("ackHandler failed: ", zap.Error(err), zap.Any("seq", msg.Seq))
 	}

@@ -90,3 +90,9 @@ func UpdatePassword(id int64, password string) error {
 func UpdateName(id int64, name string) error {
 	return db.DB.Model(&User{}).Where("id = ?", id).Update("username", name).Error
 }
+
+func GetUserPhoto(id int64) (string, error) {
+	var avatar string
+	err := db.DB.Model(&User{}).Select("avatar").Where("id = ?", id).Find(&avatar).Error
+	return avatar, err
+}

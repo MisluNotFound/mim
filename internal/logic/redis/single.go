@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 // 记录离线消息数量
@@ -29,6 +30,7 @@ func AddUnReadCount(uid int64, senderID int64, seq int64) error {
 		_, err := pipe.Exec(ctx)
 		return err
 	}); err != nil {
+		zap.L().Error("add unread message failed:", zap.Error(err))
 		return err
 	}
 

@@ -64,12 +64,10 @@ func PullOfflineMessage(userID, sessionID int64, lastRead int64, isGroup bool, j
 		seq := max(lastRead, joinTime)
 		err = db.DB.Select("seq, sender_id, target_id, content, type, url, timer, is_group").
 			Where("target_id = ? AND seq > ?", sessionID, seq).
-			Order("seq DESC").
 			Find(&messages).Error
 	} else {
 		err = db.DB.Select("seq, sender_id, target_id, content, type, url, timer, is_group").
 			Where("sender_id = ? AND target_id = ? AND seq >= ?", sessionID, userID, lastRead).
-			Order("seq DESC").
 			Find(&messages).Error
 	}
 

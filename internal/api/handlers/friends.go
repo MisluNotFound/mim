@@ -94,10 +94,11 @@ func UpdateFriendRemark(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
+// find user
 func FindFriend(c *gin.Context) {
 	p := &ParamFindFriend{}
 
-	if err := c.ShouldBindJSON(p); err != nil {
+	if err := c.ShouldBindQuery(p); err != nil {
 		ResponseError(c, code.CodeInvalidParam)
 		return
 	}
