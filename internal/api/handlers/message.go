@@ -30,6 +30,7 @@ func PullMessage(c *gin.Context) {
 		SessionID: p.SessionID,
 		LastSeq:   p.LastSeq,
 		Size:      p.Size,
+		IsGroup:   p.IsGroup,
 	}
 
 	code, data, err := rpc.PullMessage(req)

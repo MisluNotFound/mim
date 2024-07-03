@@ -37,7 +37,7 @@ func (c *Consumer) Work(isWork bool, handler func(<-chan amqp.Delivery)) {
 		zap.L().Error("bind queue failed: ", zap.Error(err))
 	}
 
-	fmt.Printf("consumer is running queue: %s\n", c.queueName)
+	fmt.Printf("consumer is running queue: queue: %s, exchange: %s, routing: %s\n", c.queueName, c.exchange, c.routingKey)
 	if isWork {
 		// 设置 QoS，预取计数为1，确保每个消费者一次只处理一个消息
 		c.rabbitMQ.lock.Lock()

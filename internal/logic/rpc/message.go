@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"mim/internal/logic/dao"
 	"mim/internal/logic/redis"
@@ -15,6 +16,7 @@ import (
 func (r *LogicRpc) PullMessage(ctx context.Context, req *proto.PullMessageReq, resp *proto.PullMessageResp) error {
 	resp.Code = code.CodeSuccess
 
+	fmt.Println("pull message req", req)
 	// 判断是否为群
 	if req.LastSeq == 0 {
 		req.LastSeq = math.MaxInt64
@@ -108,6 +110,7 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 
 	// 获取lastRead
 	counts, err := redis.GetAllLastRead(req.UserID)
+	fmt.Println("counts ", counts)
 	if err != nil {
 		resp.Code = code.CodeServerBusy
 		return err
@@ -119,6 +122,7 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 		senders = append(senders, s)
 	}
 	lastMessages, err := dao.GetLastMessage(senders, req.UserID)
+
 	if err != nil {
 		resp.Code = code.CodeServerBusy
 		return err
@@ -139,6 +143,7 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 				}
 				info.Avatar = group.Avatar
 				info.Remark = group.GroupName
+				info.LastMessage = m
 			} else {
 				// 如果是单聊 查询好友备注 头像
 				friend, _ := dao.GetFriend(m.SenderID, m.TargetID)
@@ -157,10 +162,10 @@ func (r *LogicRpc) GetUnReadCount(ctx context.Context, req *proto.GetUnReadCount
 				info.Avatar = avatar
 				if m.SenderID == s || m.TargetID == s {
 					info.LastMessage = m
-					c, _ := dao.GetUnReadCount(c, m.Seq, s, req.UserID)
-					info.Count = c
 				}
 			}
+			c, _ := dao.GetUnReadCount(c, m.Seq, s, req.UserID)
+			info.Count = c
 		}
 		infos = append(infos, info)
 	}

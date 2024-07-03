@@ -29,7 +29,7 @@ func (r *LogicRpc) SignUp(ctx context.Context, req *proto.SignUpReq, resp *proto
 	}
 
 	u := dao.User{
-		ID:       snowflake.GenID(),
+		ID:       snowflake.GenerateUniqueID(),
 		Username: req.Username,
 		Password: req.Password,
 	}
@@ -180,5 +180,3 @@ func (r *LogicRpc) UpdateName(ctx context.Context, req *proto.UpdateNameReq, res
 
 	return nil
 }
-
-

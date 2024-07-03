@@ -26,7 +26,7 @@ func NewRabbitMQ(url string) (*RabbitMQ, error) {
 	}
 
 	pch, err := conn.Channel()
-	if err != nil {
+	if err != nil { 
 		return nil, err
 	}
 
