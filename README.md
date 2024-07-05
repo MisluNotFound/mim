@@ -1,5 +1,6 @@
 # mim
 go实现的im系统后端
+[前端地址](https://github.com/MisluNotFound/mim-front/tree/master)
 ## 实现的功能
 - 支持好友管理
 - 支持群聊管理
